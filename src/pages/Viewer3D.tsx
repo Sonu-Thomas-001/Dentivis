@@ -4,8 +4,10 @@ import { Center, OrbitControls, Environment, ContactShadows, Html } from "@react
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
 import { Card } from "../components/ui/card";
 import { Button } from "../components/ui/button";
-import { Upload, Focus, RotateCcw, Box, RefreshCw } from "lucide-react";
+import { Upload, Focus, RotateCcw, Box, RefreshCw, Sparkles, Send, Stethoscope, AlertCircle, TrendingUp } from "lucide-react";
 import * as THREE from "three";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from "../components/ui/sheet";
+import { Input } from "../components/ui/input";
 
 function Loader({ progress }: { progress: number }) {
   return (
@@ -66,6 +68,30 @@ export function Viewer3D() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const controlsRef = useRef<any>(null);
 
+  // AI Chat State
+  const [messages, setMessages] = useState([
+    { role: "ai", text: "Hello! I've analyzed the 3D model. Would you like to review the suggested treatment plan or ask a specific question about the alignment?" }
+  ]);
+  const [chatInput, setChatInput] = useState("");
+
+  const mockInsights = [
+    { id: 1, type: "issue", title: "Alignment Issue Detect", description: "Mandibular anterior crowding detected (3.2mm discrepancy).", icon: AlertCircle, color: "text-orange-500", bg: "bg-orange-500/10 border-orange-500/20" },
+    { id: 2, type: "recommendation", title: "Suggested Movement", description: "IPR (Interproximal Reduction) recommended on lower incisors (Teeth 31-41).", icon: TrendingUp, color: "text-blue-500", bg: "bg-blue-500/10 border-blue-500/20" }
+  ];
+
+  const handleSendMessage = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!chatInput.trim()) return;
+    
+    setMessages(prev => [...prev, { role: "user", text: chatInput }]);
+    setChatInput("");
+    
+    // Simulate AI response
+    setTimeout(() => {
+      setMessages(prev => [...prev, { role: "ai", text: "Based on the 3D topology, the proposed movement will require approximately 14-16 aligners. I can generate a staging timeline if you'd like to review the intermediate steps." }]);
+    }, 1500);
+  };
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -99,6 +125,78 @@ export function Viewer3D() {
           <Button onClick={() => fileInputRef.current?.click()} className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-sm">
             <Upload className="w-4 h-4 mr-2" /> Load STL
           </Button>
+
+          {modelUrl && (
+            <Sheet>
+              <SheetTrigger className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 rounded-xl border border-primary/20 bg-primary/5 text-primary hover:bg-primary/10">
+                <Sparkles className="w-4 h-4 mr-2" />
+                AI Insights
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[400px] sm:max-w-md p-0 flex flex-col border-l border-border rounded-l-2xl shadow-xl">
+                <SheetHeader className="p-6 border-b border-border/50 shrink-0">
+                  <SheetTitle className="flex items-center gap-2 text-xl font-heading">
+                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                      <Sparkles className="w-4 h-4 text-primary" />
+                    </div>
+                    Dentivis AI
+                  </SheetTitle>
+                  <SheetDescription>
+                    Context-aware orthodontic analysis based on the current 3D scan.
+                  </SheetDescription>
+                </SheetHeader>
+
+                <div className="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col">
+                  {/* Important Insights Section */}
+                  <div className="space-y-3">
+                    <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider flex items-center gap-2">
+                      <Stethoscope className="w-4 h-4" />
+                      Key Findings
+                    </h3>
+                    <div className="space-y-3">
+                      {mockInsights.map(insight => (
+                        <div key={insight.id} className={`p-4 rounded-xl border ${insight.bg}`}>
+                          <div className="flex items-start gap-3">
+                            <insight.icon className={`w-5 h-5 shrink-0 mt-0.5 ${insight.color}`} />
+                            <div>
+                              <h4 className="font-semibold text-sm text-foreground">{insight.title}</h4>
+                              <p className="text-sm text-muted-foreground mt-1 leading-snug">{insight.description}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Chat Section */}
+                  <div className="flex-1 flex flex-col pt-4 border-t border-border/50">
+                    <div className="space-y-4 mb-4 flex-1">
+                      {messages.map((msg, i) => (
+                        <div key={i} className={`flex ${msg.role === "ai" ? "justify-start" : "justify-end"}`}>
+                          <div className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm ${msg.role === "ai" ? "bg-muted text-foreground rounded-tl-sm" : "bg-primary text-primary-foreground rounded-tr-sm"}`}>
+                            {msg.text}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 border-t border-border bg-card shrink-0">
+                  <form onSubmit={handleSendMessage} className="flex gap-2 relative">
+                    <Input 
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      placeholder="Ask about the treatment..." 
+                      className="rounded-full bg-muted border-transparent focus-visible:ring-primary shadow-none pr-10"
+                    />
+                    <Button type="submit" size="icon" disabled={!chatInput.trim()} className="absolute right-1 top-1 w-8 h-8 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm transition-all focus-within:z-10">
+                      <Send className="w-4 h-4" />
+                    </Button>
+                  </form>
+                </div>
+              </SheetContent>
+            </Sheet>
+          )}
         </div>
       </div>
 
