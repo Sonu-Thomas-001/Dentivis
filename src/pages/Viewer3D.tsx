@@ -25,11 +25,13 @@ function StlModel({
   wireframe,
   color,
   onLoaded,
+  transformations,
 }: {
   url: string;
   wireframe: boolean;
   color: string;
   onLoaded: () => void;
+  transformations: { posX: number; posY: number; posZ: number; rotX: number; rotY: number; rotZ: number; scale: number; };
 }) {
   const [geom, setGeom] = useState<THREE.BufferGeometry | null>(null);
 
@@ -46,15 +48,21 @@ function StlModel({
   
   return (
     <Center>
-      <mesh geometry={geom} castShadow receiveShadow>
-        <meshStandardMaterial 
-          color={color} 
-          wireframe={wireframe} 
-          roughness={0.4} 
-          metalness={0.1} 
-          side={THREE.DoubleSide} 
-        />
-      </mesh>
+      <group 
+        position={[transformations.posX, transformations.posY, transformations.posZ]}
+        rotation={[transformations.rotX * (Math.PI / 180), transformations.rotY * (Math.PI / 180), transformations.rotZ * (Math.PI / 180)]}
+        scale={[transformations.scale, transformations.scale, transformations.scale]}
+      >
+        <mesh geometry={geom} castShadow receiveShadow>
+          <meshStandardMaterial 
+            color={color} 
+            wireframe={wireframe} 
+            roughness={0.4} 
+            metalness={0.1} 
+            side={THREE.DoubleSide} 
+          />
+        </mesh>
+      </group>
     </Center>
   );
 }
@@ -67,6 +75,15 @@ export function Viewer3D() {
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const controlsRef = useRef<any>(null);
+
+  // Transformation State
+  const defaultTransform = { posX: 0, posY: 0, posZ: 0, rotX: 0, rotY: 0, rotZ: 0, scale: 1 };
+  const [transformations, setTransformations] = useState(defaultTransform);
+  const [selectedTooth, setSelectedTooth] = useState("All");
+
+  const updateTransform = (key: keyof typeof defaultTransform, value: number) => {
+    setTransformations(prev => ({ ...prev, [key]: value }));
+  };
 
   // AI Chat State
   const [messages, setMessages] = useState([
@@ -244,6 +261,76 @@ export function Viewer3D() {
                 </Button>
               </div>
 
+              {/* Transformation Controls */}
+              <div className="absolute top-4 left-4 z-10 w-72 flex flex-col gap-4 bg-card/80 backdrop-blur-md p-4 rounded-2xl border border-border shadow-md">
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 block">Target Region</label>
+                    <select 
+                      value={selectedTooth} 
+                      onChange={(e) => setSelectedTooth(e.target.value)}
+                      className="w-full bg-muted border-transparent text-sm rounded-xl px-3 py-2 focus:ring-primary focus:border-primary shadow-sm"
+                    >
+                      <option value="All">Full Model (Selection Mock)</option>
+                      <option value="Tooth_11">Tooth 11</option>
+                      <option value="Tooth_12">Tooth 12</option>
+                      <option value="Tooth_21">Tooth 21</option>
+                      <option value="Tooth_22">Tooth 22</option>
+                    </select>
+                    <p className="text-[10px] text-muted-foreground mt-1 leading-tight">Select a specific tooth to isolate mechanics (Simulated for STL rendering).</p>
+                  </div>
+
+                  <div className="space-y-2 pt-3 border-t border-border/50">
+                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Translation (mm)</label>
+                    <div className="grid grid-cols-[16px_1fr_32px] items-center gap-x-2 gap-y-1.5 text-xs">
+                      <span className="font-mono text-muted-foreground text-center">X</span>
+                      <input type="range" min="-50" max="50" step="1" value={transformations.posX} onChange={(e) => updateTransform('posX', parseFloat(e.target.value))} className="w-full accent-primary" />
+                      <span className="text-right tabular-nums">{transformations.posX}</span>
+                      
+                      <span className="font-mono text-muted-foreground text-center">Y</span>
+                      <input type="range" min="-50" max="50" step="1" value={transformations.posY} onChange={(e) => updateTransform('posY', parseFloat(e.target.value))} className="w-full accent-primary" />
+                      <span className="text-right tabular-nums">{transformations.posY}</span>
+                      
+                      <span className="font-mono text-muted-foreground text-center">Z</span>
+                      <input type="range" min="-50" max="50" step="1" value={transformations.posZ} onChange={(e) => updateTransform('posZ', parseFloat(e.target.value))} className="w-full accent-primary" />
+                      <span className="text-right tabular-nums">{transformations.posZ}</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 pt-3 border-t border-border/50">
+                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Rotation (°)</label>
+                    <div className="grid grid-cols-[16px_1fr_32px] items-center gap-x-2 gap-y-1.5 text-xs">
+                      <span className="font-mono text-muted-foreground text-center">X</span>
+                      <input type="range" min="-180" max="180" step="1" value={transformations.rotX} onChange={(e) => updateTransform('rotX', parseFloat(e.target.value))} className="w-full accent-primary" />
+                      <span className="text-right tabular-nums">{transformations.rotX}°</span>
+                      
+                      <span className="font-mono text-muted-foreground text-center">Y</span>
+                      <input type="range" min="-180" max="180" step="1" value={transformations.rotY} onChange={(e) => updateTransform('rotY', parseFloat(e.target.value))} className="w-full accent-primary" />
+                      <span className="text-right tabular-nums">{transformations.rotY}°</span>
+                      
+                      <span className="font-mono text-muted-foreground text-center">Z</span>
+                      <input type="range" min="-180" max="180" step="1" value={transformations.rotZ} onChange={(e) => updateTransform('rotZ', parseFloat(e.target.value))} className="w-full accent-primary" />
+                      <span className="text-right tabular-nums">{transformations.rotZ}°</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 pt-3 border-t border-border/50">
+                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Scale</label>
+                    <div className="grid grid-cols-[16px_1fr_32px] items-center gap-x-2 gap-y-1 text-xs">
+                      <span className="font-mono text-muted-foreground text-center">S</span>
+                      <input type="range" min="0.1" max="3" step="0.1" value={transformations.scale} onChange={(e) => updateTransform('scale', parseFloat(e.target.value))} className="w-full accent-primary" />
+                      <span className="text-right tabular-nums">{transformations.scale}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="pt-2">
+                    <Button variant="outline" size="sm" onClick={() => setTransformations(defaultTransform)} className="w-full text-xs h-8 rounded-lg font-medium">
+                      Reset Controls
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
               <Canvas shadows camera={{ position: [0, 0, 100], fov: 45 }}>
                 <ambientLight intensity={0.5} />
                 <spotLight position={[50, 50, 50]} angle={0.15} penumbra={1} intensity={1} castShadow />
@@ -252,7 +339,7 @@ export function Viewer3D() {
                 {isLoading && <Loader progress={50} />}
                 
                 <Suspense fallback={null}>
-                   <StlModel url={modelUrl} wireframe={wireframe} color={color} onLoaded={() => setIsLoading(false)} />
+                   <StlModel url={modelUrl} wireframe={wireframe} color={color} onLoaded={() => setIsLoading(false)} transformations={transformations} />
                    <Environment preset="city" />
                    <ContactShadows position={[0, -50, 0]} opacity={0.5} scale={100} blur={2} far={50} />
                 </Suspense>
