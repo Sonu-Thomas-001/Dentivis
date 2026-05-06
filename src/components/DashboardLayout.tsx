@@ -37,7 +37,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-3 w-full max-w-md">
             {/* Mobile Sidebar Trigger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger render={<button className="md:hidden p-2 -ml-2 rounded-xl text-muted-foreground hover:bg-muted transition-colors" />}>
+              <SheetTrigger className="md:hidden p-2 -ml-2 rounded-xl text-muted-foreground hover:bg-muted transition-colors border-none bg-transparent cursor-pointer">
                 <Menu className="w-5 h-5" />
               </SheetTrigger>
               <SheetContent side="left" className="p-0 w-64 border-r-border bg-background shadow-none">
@@ -68,14 +68,14 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             <div className="w-px h-6 bg-border hidden sm:block"></div>
             
             <DropdownMenu>
-              <DropdownMenuTrigger render={<button className="flex items-center gap-3 cursor-pointer p-1 sm:pr-2 rounded-full hover:bg-muted transition-colors shrink-0 outline-none" />}>
+              <DropdownMenuTrigger className="flex items-center gap-3 cursor-pointer p-1 sm:pr-2 rounded-full hover:bg-muted transition-colors shrink-0 outline-none border-none bg-transparent">
                 <div className="text-right hidden sm:block">
                   <p className="text-sm font-medium text-foreground leading-none">{user?.name}</p>
                   <p className="text-xs text-muted-foreground mt-1 capitalize font-mono tracking-tight">{user?.role.toLowerCase()}</p>
                 </div>
                 <Avatar className="w-8 h-8 border border-border shadow-sm">
                   <AvatarImage src={`https://avatar.vercel.sh/${user?.name}.png`} />
-                  <AvatarFallback>SC</AvatarFallback>
+                  <AvatarFallback>{user?.name?.charAt(0) || 'U'}</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 rounded-xl">
