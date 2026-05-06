@@ -1,10 +1,12 @@
 import React, { useRef, useEffect } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, Brain, Activity, Sparkles, Database, Network, Lock, Layers } from "lucide-react";
 import { CinematicBackground } from "../components/layout/CinematicBackground";
 import { GradientText } from "../components/ui/GradientText";
 import { cinematicReveal } from "../components/animations/Timeline";
+import { MagneticButton } from "../components/ui/MagneticButton";
+import { TiltCard } from "../components/ui/TiltCard";
 
 export const Landing = () => {
   return (
@@ -30,6 +32,7 @@ const HeroSection = () => {
   const yText = useTransform(scrollY, [0, 1000], [0, 150]);
   const opacityText = useTransform(scrollY, [0, 400], [1, 0]);
   const scaleText = useTransform(scrollY, [0, 400], [1, 0.95]);
+  const navigate = useNavigate();
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center pb-[10vh] px-6 overflow-hidden">
@@ -74,15 +77,13 @@ const HeroSection = () => {
            transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
            className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full sm:w-auto pointer-events-auto"
         >
-           <Link to="/platform" className="w-full sm:w-auto relative group flex justify-center">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#2563EB] to-[#14B8A6] rounded-full blur-xl opacity-60 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="relative px-10 py-5 bg-white text-[#020617] font-bold text-lg rounded-full flex items-center justify-center gap-3 hover:scale-105 transition-all duration-300">
-                Explore Platform <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </div>
-           </Link>
-           <Link to="/contact" className="w-full sm:w-auto px-10 py-5 bg-[#0F172A]/80 backdrop-blur-md border border-white/10 text-white font-bold text-lg rounded-full flex items-center justify-center hover:bg-white/10 hover:border-white/20 transition-all duration-300 group">
-              <span className="group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#14B8A6] transition-colors">Request Live Demo</span>
-           </Link>
+           <MagneticButton variant="primary" glowColor="rgba(20,184,166,0.5)" onClick={() => navigate('/platform')}>
+              <span className="text-lg">Explore Platform</span> <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+           </MagneticButton>
+           
+           <MagneticButton variant="secondary" onClick={() => navigate('/contact')}>
+              <span className="text-lg">Request Live Demo</span>
+           </MagneticButton>
         </motion.div>
       </motion.div>
     </section>
@@ -258,12 +259,12 @@ const FeatureBento = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
              
              {/* Large Card */}
-             <motion.div 
-                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                className="md:col-span-2 row-span-2 rounded-[3rem] bg-[#0F172A]/80 border border-white/5 p-10 relative overflow-hidden group hover:border-white/10 transition-colors"
+             <TiltCard 
+                className="md:col-span-2 row-span-2 p-10 group"
+                glowColor="rgba(37,99,235,0.15)"
              >
                 <div className="absolute inset-0 bg-gradient-to-br from-[#2563EB]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative z-10 h-full flex flex-col justify-between">
+                <div className="relative h-full flex flex-col justify-between">
                    <div>
                      <Brain className="w-10 h-10 text-[#2563EB] mb-6" />
                      <h3 className="text-3xl font-bold mb-4">Neural Engine v2</h3>
@@ -271,33 +272,31 @@ const FeatureBento = () => {
                    </div>
                    
                    {/* Abstract visualization */}
-                   <div className="w-full h-48 rounded-2xl bg-[#020617] border border-white/5 mt-8 overflow-hidden relative overflow-hidden">
+                   <div className="w-full h-48 rounded-2xl bg-[#020617] border border-white/5 mt-8 relative overflow-hidden">
                       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
                       <div className="absolute h-full w-0.5 bg-[#2563EB] left-1/3 top-0 animate-pulse shadow-[0_0_20px_#2563EB]"></div>
                       <div className="absolute h-0.5 w-full bg-[#14B8A6] top-1/2 left-0 shadow-[0_0_20px_#14B8A6]"></div>
                    </div>
                 </div>
-             </motion.div>
+             </TiltCard>
              
              {/* Square Card 1 */}
-             <motion.div 
-                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
-                className="rounded-[3rem] bg-[#0F172A]/80 border border-white/5 p-8 relative overflow-hidden group hover:border-[#14B8A6]/30 transition-colors"
+             <TiltCard 
+                className="p-8 group" glowColor="rgba(20,184,166,0.15)" tiltStrength={20}
              >
                 <Database className="w-8 h-8 text-[#14B8A6] mb-6" />
                 <h3 className="text-2xl font-bold mb-3">DICOM Fusion</h3>
                 <p className="text-[#94A3B8]">Seamlessly merge raw volume data with high-res surface scans instantly.</p>
-             </motion.div>
+             </TiltCard>
              
              {/* Square Card 2 */}
-             <motion.div 
-                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
-                className="rounded-[3rem] bg-[#0F172A]/80 border border-white/5 p-8 relative overflow-hidden group hover:border-[#6366F1]/30 transition-colors"
+             <TiltCard 
+                className="p-8 group" glowColor="rgba(99,102,241,0.15)" tiltStrength={20}
              >
                 <Network className="w-8 h-8 text-[#6366F1] mb-6" />
                 <h3 className="text-2xl font-bold mb-3">Cloud Sync</h3>
                 <p className="text-[#94A3B8]">Real-time collaborative editing between lab techs and prescribing doctors.</p>
-             </motion.div>
+             </TiltCard>
              
           </div>
        </div>
@@ -307,6 +306,7 @@ const FeatureBento = () => {
 
 const FinalCTA = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   useEffect(() => {
     if (containerRef.current) cinematicReveal(containerRef.current);
   }, []);
@@ -319,15 +319,12 @@ const FinalCTA = () => {
                Ready to upgrade your <GradientText>practice?</GradientText>
              </h2>
              <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                <Link to="/signup" className="group relative px-12 py-6 bg-white text-black rounded-full font-bold text-xl overflow-hidden hover:scale-105 transition-transform shadow-[0_0_50px_rgba(255,255,255,0.3)]">
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#94A3B8]/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
-                  <span className="relative z-10 flex items-center justify-center gap-3">
-                     Create Free Account <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                  </span>
-                </Link>
-                <Link to="/contact" className="px-12 py-6 rounded-full font-bold text-xl text-white border border-white/10 hover:bg-white/5 transition-colors">
-                  Contact Sales
-                </Link>
+                <MagneticButton variant="primary" glowColor="rgba(37,99,235,0.6)" onClick={() => navigate('/signup')}>
+                   <span className="text-xl">Create Free Account</span> <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                </MagneticButton>
+                <MagneticButton variant="secondary" onClick={() => navigate('/contact')}>
+                   <span className="text-xl">Contact Sales</span>
+                </MagneticButton>
              </div>
           </motion.div>
        </div>

@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { DashboardLayout } from "./components/DashboardLayout";
 import { SiteLayout } from "./components/SiteLayout";
 import { ProtectedRoute, PublicRoute } from "./components/ProtectedRoute";
+import { CustomCursor } from "./components/ui/CustomCursor";
 
 // Lazy load pages for final optimization
 const Landing = React.lazy(() => import("./pages/Landing").then(m => ({ default: m.Landing })));
@@ -87,6 +88,7 @@ const AnimatedRoutes = () => {
 export default function App() {
   return (
     <BrowserRouter>
+      <CustomCursor />
       <AnimatedRoutes />
     </BrowserRouter>
   );
