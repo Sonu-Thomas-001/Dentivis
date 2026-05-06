@@ -3,9 +3,11 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import { AnimatePresence, motion } from "motion/react";
 
 import { DashboardLayout } from "./components/DashboardLayout";
+import { SiteLayout } from "./components/SiteLayout";
 import { ProtectedRoute, PublicRoute } from "./components/ProtectedRoute";
 
 // Lazy load pages for final optimization
+const Landing = React.lazy(() => import("./pages/Landing").then(m => ({ default: m.Landing })));
 const Dashboard = React.lazy(() => import("./pages/Dashboard").then(m => ({ default: m.Dashboard })));
 const Cases = React.lazy(() => import("./pages/Cases").then(m => ({ default: m.Cases })));
 const Patients = React.lazy(() => import("./pages/Patients").then(m => ({ default: m.Patients })));
@@ -14,11 +16,17 @@ const AIInsights = React.lazy(() => import("./pages/AIInsights").then(m => ({ de
 const Settings = React.lazy(() => import("./pages/Settings").then(m => ({ default: m.Settings })));
 const Login = React.lazy(() => import("./pages/Login").then(m => ({ default: m.Login })));
 const Signup = React.lazy(() => import("./pages/Signup").then(m => ({ default: m.Signup })));
+const About = React.lazy(() => import("./pages/About").then(m => ({ default: m.About })));
+const Platform = React.lazy(() => import("./pages/Platform").then(m => ({ default: m.Platform })));
+const FeaturesPage = React.lazy(() => import("./pages/FeaturesPage").then(m => ({ default: m.FeaturesPage })));
+const Pricing = React.lazy(() => import("./pages/Pricing").then(m => ({ default: m.Pricing })));
+const Contact = React.lazy(() => import("./pages/Contact").then(m => ({ default: m.Contact })));
+const Blog = React.lazy(() => import("./pages/Blog").then(m => ({ default: m.Blog })));
 
 // A simple suspense loader
 const PageLoader = () => (
-  <div className="w-full h-[60vh] flex items-center justify-center">
-    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+  <div className="w-full min-h-screen bg-[#020617] flex items-center justify-center">
+    <div className="w-8 h-8 rounded-full border-2 border-[#14B8A6] border-t-transparent animate-spin"></div>
   </div>
 );
 
@@ -26,15 +34,17 @@ const PageLoader = () => (
 const PageWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.2 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
     >
       {children}
     </motion.div>
   );
 };
+
+import { SmoothScroll } from "./components/animations/SmoothScroll";
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -43,13 +53,22 @@ const AnimatedRoutes = () => {
     <AnimatePresence mode="wait">
       <Suspense fallback={<PageLoader />}>
         <Routes location={location} key={location.pathname}>
+          <Route element={<SiteLayout />}>
+            <Route path="/" element={<PageWrapper><Landing /></PageWrapper>} />
+            <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
+            <Route path="/platform" element={<PageWrapper><Platform /></PageWrapper>} />
+            <Route path="/features" element={<PageWrapper><FeaturesPage /></PageWrapper>} />
+            <Route path="/pricing" element={<PageWrapper><Pricing /></PageWrapper>} />
+            <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
+            <Route path="/blog" element={<PageWrapper><Blog /></PageWrapper>} />
+          </Route>
+          
           <Route element={<PublicRoute />}>
             <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
             <Route path="/signup" element={<PageWrapper><Signup /></PageWrapper>} />
           </Route>
 
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route element={<DashboardLayout />}>
               <Route path="/dashboard" element={<PageWrapper><Dashboard /></PageWrapper>} />
               <Route path="/cases" element={<PageWrapper><Cases /></PageWrapper>} />
@@ -68,7 +87,9 @@ const AnimatedRoutes = () => {
 export default function App() {
   return (
     <BrowserRouter>
-      <AnimatedRoutes />
+      <SmoothScroll>
+        <AnimatedRoutes />
+      </SmoothScroll>
     </BrowserRouter>
   );
 }
