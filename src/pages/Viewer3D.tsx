@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, Suspense } from "react";
+import React, { useState, useRef, useEffect, Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Center, OrbitControls, Environment, ContactShadows, Html } from "@react-three/drei";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
@@ -20,7 +20,7 @@ function Loader({ progress }: { progress: number }) {
   );
 }
 
-function StlModel({
+const StlModel = React.memo(function StlModel({
   url,
   wireframe,
   color,
@@ -42,7 +42,14 @@ function StlModel({
       setGeom(geometry);
       onLoaded();
     });
-  }, [url, onLoaded]);
+    
+    return () => {
+      // Memory cleanup for previous geometries
+      if (geom) {
+        geom.dispose();
+      }
+    };
+  }, [url]); // Intentionally not including onLoaded to avoid re-renders if it changes
 
   if (!geom) return null;
   
@@ -65,7 +72,7 @@ function StlModel({
       </group>
     </Center>
   );
-}
+});
 
 export function Viewer3D() {
   const [modelUrl, setModelUrl] = useState<string | null>(null);

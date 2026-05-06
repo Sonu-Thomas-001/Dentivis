@@ -5,6 +5,7 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/table";
 import { Badge } from "../components/ui/badge";
+import { Skeleton } from "../components/ui/skeleton";
 import { ArrowLeft, ArrowRight, Upload, Plus, FileText, CheckCircle2, MoreVertical, FileArchive, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "../components/ui/dialog";
@@ -45,6 +46,12 @@ export function Cases() {
 
   const fetchCases = async () => {
     try {
+      const cached = sessionStorage.getItem("casesData");
+      if (cached) {
+        setCases(JSON.parse(cached));
+        setLoading(false);
+      }
+
       const res = await fetch("/api/cases", {
         headers: {
           "Authorization": `Bearer ${token}`
@@ -53,6 +60,7 @@ export function Cases() {
       if (res.ok) {
         const data = await res.json();
         setCases(data);
+        sessionStorage.setItem("casesData", JSON.stringify(data));
       }
     } catch (error) {
       console.error("Failed to fetch cases", error);
@@ -109,6 +117,7 @@ export function Cases() {
         setStep(1);
         setFormData({ patientName: "", patientAge: "", type: "", notes: "" });
         setFile(null);
+        sessionStorage.removeItem("casesData");
         fetchCases();
       }
     } catch (error) {
@@ -362,7 +371,17 @@ export function Cases() {
           </CardHeader>
           <CardContent className="p-0">
             {loading ? (
-              <div className="p-12 text-center text-muted-foreground">Loading cases...</div>
+              <div className="p-6 space-y-4">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="flex items-center space-x-4">
+                    <Skeleton className="h-12 w-12 rounded-full" />
+                    <div className="space-y-2 flex-1">
+                      <Skeleton className="h-4 w-[250px]" />
+                      <Skeleton className="h-4 w-[200px]" />
+                    </div>
+                  </div>
+                ))}
+              </div>
             ) : cases.length === 0 ? (
               <div className="p-12 text-center flex flex-col items-center">
                 <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
