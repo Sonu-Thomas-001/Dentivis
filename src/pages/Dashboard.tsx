@@ -56,7 +56,7 @@ export function Dashboard() {
         </motion.div>
         
         <motion.div variants={itemVariants} className="flex gap-4">
-          <button className="px-5 py-2 rounded-lg border border-border bg-card text-foreground font-medium hover:bg-accent transition-colors flex items-center gap-2 text-sm shadow-sm">
+          <button className="px-5 py-2 rounded-lg border border-border bg-card text-foreground font-medium hover:bg-muted transition-colors flex items-center gap-2 text-sm shadow-sm">
             <Upload className="w-4 h-4 text-muted-foreground" />
             Upload Scan
           </button>
@@ -163,7 +163,7 @@ export function Dashboard() {
                         {caseItem.lastUpdated}
                       </td>
                       <td className="py-3 px-5 text-right">
-                        <button className="w-8 h-8 rounded-md flex items-center justify-center ml-auto text-muted-foreground hover:text-foreground hover:bg-accent transition-colors opacity-0 group-hover:opacity-100">
+                        <button className="w-8 h-8 rounded-md flex items-center justify-center ml-auto text-muted-foreground hover:text-foreground hover:bg-muted transition-colors opacity-0 group-hover:opacity-100">
                           <MoreVertical className="w-4 h-4" />
                         </button>
                       </td>

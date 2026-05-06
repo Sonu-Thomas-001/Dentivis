@@ -111,34 +111,34 @@ export function Viewer3D() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)] text-white font-sans bg-transparent">
+    <div className="flex flex-col h-[calc(100vh-8rem)] text-foreground font-sans bg-transparent">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 shrink-0 relative z-10">
         <div>
-          <div className="text-[10px] font-mono tracking-widest text-[#2563EB] mb-2 shadow-[0_0_10px_#2563EB]">WORKSPACE_3D</div>
-          <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-[#94A3B8] tracking-tight">Volumetric Viewer</h1>
-          <p className="text-[#94A3B8] mt-1 text-sm font-light">Real-time WebGPU rendering with neural overlays.</p>
+          <div className="text-[10px] font-semibold tracking-widest text-primary mb-2 uppercase">Workspace 3D</div>
+          <h1 className="text-4xl font-bold tracking-tight">Volumetric Viewer</h1>
+          <p className="text-muted-foreground mt-1 text-sm">Real-time WebGPU rendering with neural overlays.</p>
         </div>
         <div className="flex gap-4">
           <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileSelect} accept=".stl,.ply,.obj" />
-          <Button onClick={() => fileInputRef.current?.click()} className="bg-[#0F172A] border border-[#2563EB]/50 hover:bg-[#2563EB]/20 text-[#3B82F6] rounded-full px-6 h-12 shadow-[0_0_20px_rgba(37,99,235,0.2)] hover:shadow-[0_0_30px_rgba(37,99,235,0.4)] transition-all flex items-center gap-2">
+          <Button onClick={() => fileInputRef.current?.click()} className="bg-card border border-primary/50 hover:bg-primary/10 text-primary rounded-full px-6 h-12 shadow-sm transition-all flex items-center gap-2">
             <Upload className="w-4 h-4" /> INJECT MESH
           </Button>
 
           {modelUrl && (
             <Sheet>
-              <SheetTrigger className="h-12 px-6 rounded-full border border-[#14B8A6]/50 bg-[#14B8A6]/10 text-[#14B8A6] hover:bg-[#14B8A6]/20 shadow-[0_0_20px_rgba(20,184,166,0.1)] transition-all flex items-center gap-2 font-medium">
+              <SheetTrigger className="h-12 px-6 rounded-full border border-secondary/50 bg-secondary/10 text-secondary hover:bg-secondary/20 transition-all flex items-center gap-2 font-medium">
                 <Sparkles className="w-4 h-4" />
                 NEURAL ANALYSIS
               </SheetTrigger>
-              <SheetContent side="right" className="w-[450px] sm:max-w-md p-0 flex flex-col border-l border-white/10 bg-[#020617]/90 backdrop-blur-3xl text-white">
-                <SheetHeader className="p-8 border-b border-white/5 shrink-0 bg-gradient-to-br from-[#0F172A]/50 to-transparent">
+              <SheetContent side="right" className="w-[450px] sm:max-w-md p-0 flex flex-col border-l border-border bg-card/95 backdrop-blur-3xl text-foreground">
+                <SheetHeader className="p-8 border-b border-border shrink-0 bg-muted/30">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-xl bg-[#020617] border border-[#14B8A6]/30 flex items-center justify-center shadow-[0_0_15px_rgba(20,184,166,0.2)]">
-                      <Sparkles className="w-5 h-5 text-[#14B8A6]" />
+                    <div className="w-10 h-10 rounded-xl bg-background border border-secondary/30 flex items-center justify-center shadow-sm">
+                      <Sparkles className="w-5 h-5 text-secondary" />
                     </div>
-                    <SheetTitle className="text-2xl font-bold tracking-tight text-white">Dentivis AI</SheetTitle>
+                    <SheetTitle className="text-2xl font-bold tracking-tight text-foreground">Dentivis AI</SheetTitle>
                   </div>
-                  <SheetDescription className="text-[#94A3B8] font-light">
+                  <SheetDescription className="text-muted-foreground font-medium">
                     Context-aware biomechanical analysis from spatial data.
                   </SheetDescription>
                 </SheetHeader>
@@ -146,7 +146,7 @@ export function Viewer3D() {
                 <div className="flex-1 overflow-y-auto p-8 space-y-8 flex flex-col no-scrollbar">
                   {/* Insights Section */}
                   <div className="space-y-4">
-                    <h3 className="text-xs font-mono tracking-widest text-[#94A3B8] flex items-center gap-2 uppercase">
+                    <h3 className="text-xs font-semibold tracking-wider text-muted-foreground flex items-center gap-2 uppercase">
                       <Stethoscope className="w-3.5 h-3.5" />
                       Critical Vectors
                     </h3>
@@ -157,7 +157,7 @@ export function Viewer3D() {
                             <insight.icon className={`w-5 h-5 shrink-0 mt-0.5 ${insight.color}`} />
                             <div>
                               <h4 className={`font-bold text-sm ${insight.color} mb-1`}>{insight.title}</h4>
-                              <p className="text-sm text-[#94A3B8] leading-relaxed">{insight.description}</p>
+                              <p className="text-sm text-foreground/80 leading-relaxed">{insight.description}</p>
                             </div>
                           </div>
                         </div>
@@ -166,11 +166,11 @@ export function Viewer3D() {
                   </div>
 
                   {/* Chat Section */}
-                  <div className="flex-1 flex flex-col pt-6 border-t border-white/5">
+                  <div className="flex-1 flex flex-col pt-6 border-t border-border">
                     <div className="space-y-4 mb-4 flex-1">
                       {messages.map((msg, i) => (
                         <div key={i} className={`flex ${msg.role === "ai" ? "justify-start" : "justify-end"}`}>
-                          <div className={`max-w-[85%] rounded-2xl px-5 py-3.5 text-sm leading-relaxed ${msg.role === "ai" ? "bg-[#0F172A] border border-white/5 text-[#F8FAFC] rounded-tl-sm" : "bg-[#2563EB] text-white rounded-tr-sm shadow-[0_0_15px_rgba(37,99,235,0.3)]"}`}>
+                          <div className={`max-w-[85%] rounded-2xl px-5 py-3.5 text-sm leading-relaxed ${msg.role === "ai" ? "bg-muted border border-border text-foreground rounded-tl-sm" : "bg-primary text-primary-foreground rounded-tr-sm shadow-sm"}`}>
                             {msg.text}
                           </div>
                         </div>
@@ -179,15 +179,15 @@ export function Viewer3D() {
                   </div>
                 </div>
 
-                <div className="p-6 border-t border-white/5 bg-[#0F172A]/30 shrink-0 backdrop-blur-xl">
+                <div className="p-6 border-t border-border bg-muted/20 shrink-0">
                   <form onSubmit={handleSendMessage} className="flex gap-3 relative">
                     <input 
                       value={chatInput}
                       onChange={(e) => setChatInput(e.target.value)}
                       placeholder="Query the model..." 
-                      className="w-full bg-[#020617] border border-white/10 rounded-full pl-5 pr-14 py-3.5 text-white placeholder:text-[#94A3B8] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-all shadow-inner"
+                      className="w-full bg-background border border-border rounded-full pl-5 pr-14 py-3.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
                     />
-                    <button type="submit" disabled={!chatInput.trim()} className="absolute right-2 top-2 bottom-2 w-10 h-10 rounded-full bg-[#2563EB] text-white flex items-center justify-center hover:bg-[#1D4ED8] hover:scale-105 transition-all shadow-[0_0_15px_rgba(37,99,235,0.4)] disabled:opacity-50 disabled:scale-100">
+                    <button type="submit" disabled={!chatInput.trim()} className="absolute right-2 top-2 bottom-2 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:opacity-90 transition-all shadow-sm disabled:opacity-50">
                       <Send className="w-4 h-4 ml-0.5" />
                     </button>
                   </form>
@@ -198,55 +198,54 @@ export function Viewer3D() {
         </div>
       </div>
 
-      <div className="flex-1 w-full rounded-[2rem] border border-white/10 shadow-2xl overflow-hidden relative flex bg-[#020617] group">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay z-0 pointer-events-none"></div>
+      <div className="flex-1 w-full rounded-2xl border border-border shadow-2xl overflow-hidden relative flex bg-card group">
         
         <div className="flex-1 relative min-h-[400px] z-10 p-2">
           {!modelUrl ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <div className="absolute w-[500px] h-[500px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#2563EB]/10 to-transparent blur-3xl pointer-events-none"></div>
-              <div className="w-24 h-24 rounded-full border border-dashed border-[#2563EB]/50 flex items-center justify-center mb-6 animate-[spin_20s_linear_infinite] shadow-[0_0_30px_rgba(37,99,235,0.1)]">
-                <div className="w-16 h-16 rounded-full border border-[#14B8A6]/50 flex items-center justify-center animate-[spin_10s_linear_infinite_reverse]">
-                   <Box className="w-6 h-6 text-[#14B8A6] animate-none" />
+              <div className="absolute w-[500px] h-[500px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 to-transparent blur-3xl pointer-events-none"></div>
+              <div className="w-24 h-24 rounded-full border border-dashed border-primary/50 flex items-center justify-center mb-6 animate-[spin_20s_linear_infinite] shadow-[0_0_30px_rgba(var(--primary),0.1)]">
+                <div className="w-16 h-16 rounded-full border border-secondary/50 flex items-center justify-center animate-[spin_10s_linear_infinite_reverse]">
+                   <Box className="w-6 h-6 text-secondary animate-none" />
                 </div>
               </div>
-              <p className="font-heading font-semibold text-2xl text-white mb-2 tracking-tight">No volumetric data</p>
-              <p className="text-[#94A3B8] text-center max-w-sm font-light mb-8">Inject a DICOM volume or surface scan to initialize the neural rendering pipeline.</p>
-              <button onClick={() => fileInputRef.current?.click()} className="px-8 py-4 rounded-full border border-[#2563EB]/50 hover:bg-[#2563EB]/10 text-[#3B82F6] font-bold tracking-wide transition-all uppercase text-sm shadow-[0_0_20px_rgba(37,99,235,0.1)] hover:shadow-[0_0_30px_rgba(37,99,235,0.3)]">
+              <p className="font-bold text-2xl text-foreground mb-2 tracking-tight">No volumetric data</p>
+              <p className="text-muted-foreground text-center max-w-sm font-medium mb-8">Inject a DICOM volume or surface scan to initialize the neural rendering pipeline.</p>
+              <button onClick={() => fileInputRef.current?.click()} className="px-8 py-4 rounded-full border border-primary/50 hover:bg-primary/10 text-primary font-bold tracking-wide transition-all uppercase text-sm shadow-sm hover:shadow-md">
                 Initialize Sequence
               </button>
             </div>
           ) : (
-            <div className="w-full h-full rounded-[1.5rem] border border-white/5 relative overflow-hidden bg-gradient-to-b from-[#0F172A] to-[#020617]">
+            <div className="w-full h-full rounded-2xl border border-border relative overflow-hidden bg-muted/30">
               {/* Overlay Controls */}
-              <div className="absolute top-6 right-6 z-20 flex flex-col gap-3 bg-[#020617]/50 backdrop-blur-xl p-3 rounded-2xl border border-white/10 shadow-2xl">
-                <button onClick={() => controlsRef.current?.reset()} className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 flex items-center justify-center text-[#94A3B8] hover:text-white transition-all">
+              <div className="absolute top-6 right-6 z-20 flex flex-col gap-3 bg-card/80 backdrop-blur-xl p-3 rounded-2xl border border-border shadow-2xl">
+                <button onClick={() => controlsRef.current?.reset()} className="w-10 h-10 rounded-xl bg-muted/50 border border-border hover:bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground transition-all">
                   <Focus className="w-4 h-4" />
                 </button>
-                <button onClick={() => setAutoRotate(!autoRotate)} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${autoRotate ? 'bg-[#14B8A6]/20 border border-[#14B8A6]/50 text-[#14B8A6] shadow-[0_0_15px_rgba(20,184,166,0.3)]' : 'bg-white/5 border border-white/5 hover:bg-white/10 text-[#94A3B8] hover:text-white'}`}>
+                <button onClick={() => setAutoRotate(!autoRotate)} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${autoRotate ? 'bg-secondary/20 border border-secondary/50 text-secondary' : 'bg-muted/50 border border-border hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
                   <RotateCcw className="w-4 h-4" />
                 </button>
-                <button onClick={() => setWireframe(!wireframe)} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${wireframe ? 'bg-[#2563EB]/20 border border-[#2563EB]/50 text-[#3B82F6] shadow-[0_0_15px_rgba(37,99,235,0.3)]' : 'bg-white/5 border border-white/5 hover:bg-white/10 text-[#94A3B8] hover:text-white'}`}>
+                <button onClick={() => setWireframe(!wireframe)} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${wireframe ? 'bg-primary/20 border border-primary/50 text-primary' : 'bg-muted/50 border border-border hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
                   <Box className="w-4 h-4" />
                 </button>
               </div>
 
               {/* Transformation HUD */}
-              <div className="absolute bottom-6 left-6 z-20 w-80 flex flex-col gap-5 bg-[#020617]/50 backdrop-blur-2xl p-5 rounded-2xl border border-white/10 shadow-2xl pointer-events-auto">
+              <div className="absolute bottom-6 left-6 z-20 w-80 flex flex-col gap-5 bg-card/80 backdrop-blur-2xl p-5 rounded-2xl border border-border shadow-2xl pointer-events-auto">
                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-2 h-2 rounded-full bg-[#14B8A6] animate-pulse"></div>
-                    <span className="text-[10px] font-mono tracking-widest text-[#14B8A6] uppercase">Kinematic Controls</span>
+                    <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+                    <span className="text-[10px] font-semibold tracking-widest text-secondary uppercase">Kinematic Controls</span>
                  </div>
                  
                  <div className="space-y-4">
                     <div className="space-y-2">
-                      <div className="flex justify-between text-xs font-mono text-[#94A3B8]"><span className="uppercase">Scale Matrix</span> <span className="text-white">{transformations.scale}x</span></div>
-                      <input type="range" min="0.1" max="3" step="0.1" value={transformations.scale} onChange={(e) => updateTransform('scale', parseFloat(e.target.value))} className="w-full accent-[#2563EB]" />
+                      <div className="flex justify-between text-xs font-semibold text-muted-foreground"><span className="uppercase">Scale Matrix</span> <span className="text-foreground">{transformations.scale}x</span></div>
+                      <input type="range" min="0.1" max="3" step="0.1" value={transformations.scale} onChange={(e) => updateTransform('scale', parseFloat(e.target.value))} className="w-full accent-primary" />
                     </div>
                     
                     <div className="space-y-2">
-                      <div className="flex justify-between text-xs font-mono text-[#94A3B8]"><span className="uppercase">Y-Axis Torque</span> <span className="text-white">{transformations.rotY}°</span></div>
-                      <input type="range" min="-180" max="180" step="1" value={transformations.rotY} onChange={(e) => updateTransform('rotY', parseFloat(e.target.value))} className="w-full accent-[#14B8A6]" />
+                      <div className="flex justify-between text-xs font-semibold text-muted-foreground"><span className="uppercase">Y-Axis Torque</span> <span className="text-foreground">{transformations.rotY}°</span></div>
+                      <input type="range" min="-180" max="180" step="1" value={transformations.rotY} onChange={(e) => updateTransform('rotY', parseFloat(e.target.value))} className="w-full accent-secondary" />
                     </div>
                  </div>
               </div>

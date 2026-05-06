@@ -37,7 +37,7 @@ export function Patients() {
               className="w-full bg-card border border-border rounded-full pl-11 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
             />
           </div>
-          <button className="w-10 h-10 rounded-full border border-border bg-card flex items-center justify-center hover:bg-accent hover:text-accent-foreground text-muted-foreground transition-colors shrink-0 shadow-sm">
+          <button className="w-10 h-10 rounded-full border border-border bg-card flex items-center justify-center hover:bg-muted text-muted-foreground hover:text-foreground transition-colors shrink-0 shadow-sm">
             <Filter className="w-4 h-4" />
           </button>
         </motion.div>
@@ -123,7 +123,7 @@ export function Patients() {
                                </div>
                             </td>
                             <td className="py-4 px-6 text-right">
-                               <button className="w-8 h-8 rounded-md flex items-center justify-center ml-auto text-muted-foreground hover:text-foreground hover:bg-accent transition-colors opacity-0 group-hover:opacity-100">
+                               <button className="w-8 h-8 rounded-md flex items-center justify-center ml-auto text-muted-foreground hover:text-foreground hover:bg-muted transition-colors opacity-0 group-hover:opacity-100">
                                  <MoreVertical className="w-4 h-4" />
                                </button>
                             </td>
