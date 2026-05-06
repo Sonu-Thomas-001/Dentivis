@@ -6,41 +6,66 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  name      String
-  role      String   @default("ORTHODONTIST")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  patients  Patient[]
+  id         String        @id @default(uuid())
+  email      String        @unique
+  password   String
+  name       String
+  role       String        @default("ORTHODONTIST")
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  patients   Patient[]
+  activities ActivityLog[]
 }
 
 model Patient {
-  id             String           @id @default(uuid())
+  id             String        @id @default(uuid())
   name           String
   dateOfBirth    DateTime?
-  status         String           @default("ACTIVE")
+  status         String        @default("ACTIVE")
   orthodontistId String
-  orthodontist   User             @relation(fields: [orthodontistId], references: [id])
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  orthodontist   User          @relation(fields: [orthodontistId], references: [id])
+  cases          Case[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
 model Case {
-  id             String   @id @default(uuid())
-  patientName    String
-  patientAge     Int?
-  type           String
-  status         String   @default("Draft")
-  scanFileUrl    String?
-  notes          String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id         String        @id @default(uuid())
+  patientId  String
+  patient    Patient       @relation(fields: [patientId], references: [id])
+  type       String
+  status     String        @default("Draft")
+  notes      String?
+  files      File[]
+  activities ActivityLog[]
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+}
+
+model File {
+  id        String   @id @default(uuid())
+  url       String
+  filename  String
+  type      String
+  size      Int
+  caseId    String
+  case      Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  action    String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  caseId    String?
+  case      Case?    @relation(fields: [caseId], references: [id])
+  createdAt DateTime @default(now())
 }
 

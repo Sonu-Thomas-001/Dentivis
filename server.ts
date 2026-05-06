@@ -111,7 +111,9 @@ async function startServer() {
 
   app.get("/api/patients", authenticateToken, async (req, res) => {
     try {
-      const patients = await prisma.patient.findMany();
+      const patients = await prisma.patient.findMany({
+        include: { cases: true }
+      });
       res.json(patients);
     } catch (error) {
       console.error(error);
@@ -122,35 +124,103 @@ async function startServer() {
   app.get("/api/cases", authenticateToken, async (req, res) => {
     try {
       const cases = await prisma.case.findMany({
+        include: { patient: true, files: true, activities: true },
         orderBy: { createdAt: "desc" },
       });
-      res.json(cases);
+      // Map to frontend expected shape for now
+      const formattedCases = cases.map(c => ({
+        ...c,
+        patientName: c.patient.name,
+        patientAge: null, // Since dateOfBirth is used now
+        scanFileUrl: c.files[0]?.url || null
+      }));
+      res.json(formattedCases);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Failed to fetch cases" });
     }
   });
 
-  app.post("/api/cases", authenticateToken, upload.single("scanFile"), async (req, res) => {
+  app.post("/api/cases", authenticateToken, upload.single("scanFile"), async (req: any, res) => {
     try {
       const { patientName, patientAge, type, notes } = req.body;
-      const scanFileUrl = req.file ? `/uploads/${req.file.filename}` : null;
       
+      let patient = await prisma.patient.findFirst({ where: { name: patientName } });
+      if (!patient) {
+        patient = await prisma.patient.create({
+          data: {
+            name: patientName || "Unknown Patient",
+            orthodontistId: req.user.id
+          }
+        });
+      }
+
       const newCase = await prisma.case.create({
         data: {
-          patientName,
-          patientAge: patientAge ? parseInt(patientAge) : undefined,
-          type,
+          patientId: patient.id,
+          type: type || "Unknown",
           notes,
-          scanFileUrl,
           status: "Draft",
         },
+      });
+
+      if (req.file) {
+        await prisma.file.create({
+          data: {
+            url: `/uploads/${req.file.filename}`,
+            filename: req.file.originalname,
+            type: req.file.mimetype,
+            size: req.file.size,
+            caseId: newCase.id
+          }
+        });
+      }
+
+      await prisma.activityLog.create({
+        data: {
+          action: "Case created",
+          userId: req.user.id,
+          caseId: newCase.id
+        }
       });
       
       res.json(newCase);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Failed to create case" });
+    }
+  });
+
+  app.post("/api/ai/analyze", authenticateToken, async (req: any, res) => {
+    try {
+      const { caseId } = req.body;
+      
+      // Mock AI response
+      const aiResponse = {
+        analysis: "The scan reveals mild anterior crowding with Class I molar relationship. Treatment recommendation includes comprehensive clear aligner therapy, targeting 14-16 weeks duration.",
+        confidenceScore: 0.92,
+        detectedAnomalies: ["Anterior crowding", "Slight overjet"],
+        recommendedPlan: "Clear Aligner Therapy (15 stages)"
+      };
+
+      if (caseId) {
+        await prisma.activityLog.create({
+          data: {
+            action: `AI analysis completed`,
+            userId: req.user.id,
+            caseId
+          }
+        });
+      }
+
+      // Add slight delay to mock thinking time
+      setTimeout(() => {
+        res.json(aiResponse);
+      }, 1500);
+
+    } catch (error) {
+      console.error("AI Analysis error:", error);
+      res.status(500).json({ error: "Failed to perform AI analysis" });
     }
   });
 
