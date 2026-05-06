@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useAuthStore } from "../store/useAuthStore";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -20,6 +21,7 @@ interface Case {
 }
 
 export function Cases() {
+  const { token } = useAuthStore();
   const [cases, setCases] = useState<Case[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -43,7 +45,11 @@ export function Cases() {
 
   const fetchCases = async () => {
     try {
-      const res = await fetch("/api/cases");
+      const res = await fetch("/api/cases", {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
       if (res.ok) {
         const data = await res.json();
         setCases(data);
@@ -93,6 +99,9 @@ export function Cases() {
     try {
       const res = await fetch("/api/cases", {
         method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
         body: data,
       });
       if (res.ok) {

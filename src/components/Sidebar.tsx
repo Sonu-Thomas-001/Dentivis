@@ -1,7 +1,8 @@
-import { Activity, Users, Settings, LayoutDashboard, Hexagon, Sparkles, Box, PanelLeftClose, PanelLeft, FileText } from "lucide-react";
+import { Activity, Users, Settings, LayoutDashboard, Hexagon, Sparkles, Box, PanelLeftClose, PanelLeft, FileText, LogOut } from "lucide-react";
 import { cn } from "../lib/utils";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useStore } from "../lib/store";
+import { useAuthStore } from "../store/useAuthStore";
 
 interface SidebarProps {
   className?: string;
@@ -10,6 +11,13 @@ interface SidebarProps {
 
 export function Sidebar({ className, onClickItem }: SidebarProps) {
   const { sidebarCollapsed, setSidebarCollapsed } = useStore();
+  const { logout } = useAuthStore();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   const navItems = [
     { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -105,6 +113,18 @@ export function Sidebar({ className, onClickItem }: SidebarProps) {
               <span>Collapse</span>
             </>
           )}
+        </button>
+
+        <button
+          onClick={handleLogout}
+          className={cn(
+            "flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-medium text-destructive/80 hover:bg-destructive/10 hover:text-destructive transition-all group overflow-hidden mt-4",
+            sidebarCollapsed && "justify-center px-0"
+          )}
+          title={sidebarCollapsed ? "Log Out" : undefined}
+        >
+          <LogOut className="w-5 h-5 shrink-0 transition-colors" />
+          {!sidebarCollapsed && <span>Log Out</span>}
         </button>
       </div>
     </aside>

@@ -1,10 +1,11 @@
 import { Sidebar } from "./Sidebar";
-import { useStore } from "../lib/store";
+import { useAuthStore } from "../store/useAuthStore";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Search, Bell, Sun, Moon, Menu, LogOut, User } from "lucide-react";
 import { Input } from "./ui/input";
 import { useTheme } from "../lib/useTheme";
 import { useState } from "react";
+import { useNavigate, Outlet } from "react-router-dom";
 import {
   Sheet,
   SheetContent,
@@ -19,11 +20,16 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
-export function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const user = useStore((state) => state.user);
-  const sidebarCollapsed = useStore((state) => state.sidebarCollapsed);
+export function DashboardLayout() {
+  const { user, logout } = useAuthStore();
   const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <div className="flex h-screen bg-background font-sans text-foreground overflow-hidden">
@@ -71,11 +77,11 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
               <DropdownMenuTrigger className="flex items-center gap-3 cursor-pointer p-1 sm:pr-2 rounded-full hover:bg-muted transition-colors shrink-0 outline-none border-none bg-transparent">
                 <div className="text-right hidden sm:block">
                   <p className="text-sm font-medium text-foreground leading-none">{user?.name}</p>
-                  <p className="text-xs text-muted-foreground mt-1 capitalize font-mono tracking-tight">{user?.role.toLowerCase()}</p>
+                  <p className="text-xs text-muted-foreground mt-1 capitalize font-mono tracking-tight">Orthodontist</p>
                 </div>
                 <Avatar className="w-8 h-8 border border-border shadow-sm">
-                  <AvatarImage src={`https://avatar.vercel.sh/${user?.name}.png`} />
-                  <AvatarFallback>{user?.name?.charAt(0) || 'U'}</AvatarFallback>
+                  <AvatarImage src={`https://avatar.vercel.sh/${user?.name || "doctor"}.png`} />
+                  <AvatarFallback>{user?.name?.charAt(0) || 'D'}</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 rounded-xl">
@@ -91,7 +97,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                   <span>Profile Settings</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive">
+                <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive" onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                 </DropdownMenuItem>
@@ -102,7 +108,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         </header>
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 bg-muted/10">
           <div className="max-w-7xl mx-auto">
-            {children}
+            <Outlet />
           </div>
         </main>
       </div>
