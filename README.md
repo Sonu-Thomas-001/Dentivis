@@ -80,22 +80,22 @@ Our enterprise architecture ensures strict data segregation, horizontal scalabil
 
 ```mermaid
 graph TD
-    Client[Web Client: React + Three.js + Framer] -->|HTTPS/WSS| API Gateway[API Gateway & Edge Runtime]
+    Client[Web Client: React + Three.js + Framer] -->|HTTPS/WSS| API_Gateway[API Gateway & Edge Runtime]
     
-    subgraph Control Plane
-        API Gateway --> Auth[Auth & IAM]
-        API Gateway --> CoreAPI[Node.js Services]
+    subgraph Control_Plane [Control Plane]
+        API_Gateway --> Auth[Auth & IAM]
+        API_Gateway --> CoreAPI[Node.js Services]
     end
     
-    subgraph Intelligence Engine
+    subgraph Intelligence_Engine [Intelligence Engine]
         CoreAPI --> InferenceLayer[AI Inference Router]
         InferenceLayer --> PyTorchModel[Ceph / Segmentation Models]
         InferenceLayer --> BioMech[Biomechanics & Staging Simulator]
     end
     
-    subgraph Persistence Layer
+    subgraph Persistence_Layer [Persistence Layer]
         CoreAPI --> PrimaryDB[(PostgreSQL + Prisma)]
-        CoreAPI --> Storage[AWS S3 / DICOM Storage]
+        CoreAPI --> Storage[(AWS S3 / DICOM Storage)]
         CoreAPI --> RedisCache[(Redis Cache)]
     end
 ```
