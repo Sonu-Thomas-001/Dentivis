@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
-import { Activity, ArrowLeft, BrainCircuit } from 'lucide-react';
+import { Activity, ArrowLeft, Building2, User, ChevronRight, Lock, Check } from 'lucide-react';
 import { motion } from 'motion/react';
-import { TiltCard } from '../components/ui/TiltCard';
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -39,134 +38,136 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] flex items-center justify-center p-4 relative overflow-hidden font-sans">
-      {/* Cinematic Background Effects */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#2563EB]/15 via-[#020617] to-transparent blur-[10px] pointer-events-none mix-blend-screen transition-opacity duration-1000"></div>
-        <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#14B8A6]/10 via-[#020617] to-transparent blur-[10px] pointer-events-none mix-blend-screen"></div>
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.15] mix-blend-overlay"></div>
-      </div>
-
+    <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4 md:p-8 font-sans">
       <div className="absolute top-8 left-8 z-30">
-        <Link to="/" className="text-[#94A3B8] hover:text-white flex items-center gap-2 transition-colors group">
-          <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
-             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          </div>
-          <span className="text-xs font-mono uppercase tracking-widest">Return</span>
+        <Link to="/" className="text-[#64748B] hover:text-[#0F172A] flex items-center gap-2 transition-colors">
+          <ArrowLeft className="w-4 h-4" />
+          <span className="text-sm font-medium">Back to Home</span>
         </Link>
       </div>
 
-      <div className="w-full max-w-[1100px] grid md:grid-cols-[1fr_1.2fr] rounded-[3rem] bg-[#0F172A]/40 backdrop-blur-3xl border border-white/10 shadow-[0_0_100px_rgba(37,99,235,0.05)] overflow-hidden relative z-10">
-        {/* Left Side (Form) */}
-        <div className="p-10 md:p-16 flex flex-col justify-center relative bg-[#020617]/40 shadow-xl z-20">
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, ease: "easeOut" }}>
-            <div className="w-14 h-14 bg-[#020617] border border-white/10 rounded-2xl flex items-center justify-center shadow-inner mb-10 relative overflow-hidden group">
-               <div className="absolute inset-0 bg-gradient-to-br from-[#2563EB]/20 to-transparent opacity-50 group-hover:opacity-100 transition-opacity"></div>
-               <Activity className="w-6 h-6 text-[#14B8A6] relative z-10" />
+      <div className="w-full max-w-[1100px] h-full md:h-[700px] bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-[#E2E8F0] overflow-hidden flex flex-col md:flex-row relative z-10">
+        
+        {/* Left Side (Visual) */}
+        <div className="hidden md:flex w-[45%] bg-[#F8FAFC] flex-col relative overflow-hidden border-r border-[#E2E8F0] items-center justify-center p-12">
+          
+          <div className="absolute inset-0 z-0">
+             <div className="absolute top-[-10%] left-[-20%] w-[500px] h-[500px] bg-gradient-to-br from-[#DBEAFE]/80 to-transparent blur-[80px] rounded-full pointer-events-none"></div>
+             <div className="absolute bottom-[-10%] right-[-20%] w-[500px] h-[500px] bg-gradient-to-tl from-[#14B8A6]/10 to-transparent blur-[80px] rounded-full pointer-events-none"></div>
+          </div>
+          
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }} className="relative z-10 text-center flex flex-col items-center">
+            
+            <div className="w-16 h-16 bg-white rounded-2xl shadow-sm border border-[#E2E8F0] flex items-center justify-center mb-8">
+               <Activity className="w-8 h-8 text-[#2563EB]" />
             </div>
+
+            <h2 className="text-3xl font-semibold text-[#0F172A] tracking-tight mb-4 leading-snug">Welcome Back to <br/>Dentivis</h2>
+            <p className="text-[#64748B] mb-12 max-w-sm mx-auto font-medium leading-relaxed">Securely access your orthodontic workflow platform.</p>
             
-            <h1 className="text-4xl font-black tracking-tight text-white mb-2">Initialize.</h1>
-            <p className="text-[#94A3B8] text-sm mb-12 font-light leading-relaxed">Enter credentials to authenticate neural handshake.</p>
+            <div className="w-full max-w-sm bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-sm text-left">
+               <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 rounded-full bg-[#ECFDF5] flex items-center justify-center">
+                     <Check className="w-4 h-4 text-[#22C55E]" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-[#0F172A]">HIPAA Compliant</h4>
+                    <p className="text-xs text-[#64748B]">Enterprise-grade security</p>
+                  </div>
+               </div>
+               <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#EFF6FF] flex items-center justify-center">
+                     <Lock className="w-4 h-4 text-[#2563EB]" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-[#0F172A]">End-to-End Encryption</h4>
+                    <p className="text-xs text-[#64748B]">Your patient data is protected</p>
+                  </div>
+               </div>
+            </div>
+
+          </motion.div>
+        </div>
+
+        {/* Right Side (Form) */}
+        <div className="w-full md:w-[55%] p-8 md:p-14 lg:p-20 flex flex-col justify-center bg-white">
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, ease: "easeOut" }} className="w-full max-w-[400px] mx-auto">
             
-            <form onSubmit={handleLogin} className="space-y-6">
-              <div className="space-y-3 group/input">
-                <label className="text-xs font-mono font-medium text-[#94A3B8] uppercase tracking-widest flex items-center gap-2">
-                   <span className="w-1 h-1 bg-[#2563EB] rounded-full group-focus-within/input:animate-ping inline-block"></span>
-                   Operator Identifier
-                </label>
-                <input 
-                  type="email" 
-                  placeholder="doctor@clinic.com" 
-                  required 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-[#0F172A]/50 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-white/20 focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-all focus:bg-[#020617] group-hover/input:border-white/20 shadow-inner"
-                />
-              </div>
-              <div className="space-y-3 group/input">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-mono font-medium text-[#94A3B8] uppercase tracking-widest flex items-center gap-2">
-                     <span className="w-1 h-1 bg-[#14B8A6] rounded-full group-focus-within/input:animate-ping inline-block"></span>
-                     Access Key
-                  </label>
-                  <a href="#" className="text-xs font-medium text-[#94A3B8] hover:text-white transition-colors border-b border-transparent hover:border-white/50 pb-0.5">Recover Key</a>
+            <h1 className="text-2xl font-bold text-[#0F172A] mb-2">Sign in to your account</h1>
+            <p className="text-[#64748B] text-sm mb-8">Don't have an account? <Link to="/signup" className="text-[#2563EB] hover:text-[#1D4ED8] font-medium transition-colors">Request Access</Link></p>
+            
+            <form onSubmit={handleLogin} className="space-y-5">
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium text-[#0F172A]">Email Address</label>
+                <div className="relative">
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B]" />
+                  <input 
+                    type="email" 
+                    placeholder="doctor@clinic.com" 
+                    required 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl pl-10 pr-4 py-3 text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all text-sm"
+                  />
                 </div>
-                <input 
-                  type="password" 
-                  placeholder="••••••••"
-                  required 
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-[#0F172A]/50 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-white/20 focus:outline-none focus:border-[#14B8A6] focus:ring-1 focus:ring-[#14B8A6] transition-all focus:bg-[#020617] group-hover/input:border-white/20 shadow-inner"
-                />
+              </div>
+
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-[#0F172A]">Password</label>
+                  <a href="#" className="text-sm font-medium text-[#2563EB] hover:text-[#1D4ED8] transition-colors">Forgot password?</a>
+                </div>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B]" />
+                  <input 
+                    type="password" 
+                    placeholder="••••••••"
+                    required 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl pl-10 pr-4 py-3 text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 transition-all text-sm"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 pt-2 pb-4">
+                <input type="checkbox" id="remember" className="w-4 h-4 rounded border-[#E2E8F0] text-[#2563EB] focus:ring-[#2563EB]/20" />
+                <label htmlFor="remember" className="text-sm text-[#64748B]">Remember me for 30 days</label>
               </div>
               
               <button 
                 type="submit" 
                 disabled={isLoading} 
-                className="w-full h-16 mt-8 rounded-2xl bg-white hover:bg-gray-100 text-[#020617] font-black tracking-widest uppercase text-sm shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:shadow-[0_0_50px_rgba(255,255,255,0.4)] transition-all flex items-center justify-center relative overflow-hidden group/btn active:scale-[0.98]"
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] hover:opacity-90 text-white font-medium shadow-sm transition-all flex items-center justify-center group disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
-                  <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                   <>
-                     <span className="relative z-10">Establish Link</span>
+                    Sign In <ChevronRight className="w-4 h-4 ml-1 opacity-70 group-hover:translate-x-1 group-hover:opacity-100 transition-all" />
                   </>
                 )}
               </button>
+
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-[#E2E8F0]"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-[#64748B]">Or continue with</span>
+                </div>
+              </div>
+
+              <button 
+                type="button" 
+                className="w-full py-3.5 rounded-xl bg-white border border-[#E2E8F0] hover:bg-[#F8FAFC] text-[#0F172A] font-medium shadow-sm transition-all flex items-center justify-center gap-2"
+              >
+                <svg viewBox="0 0 24 24" className="w-5 h-5" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/><path d="M1 1h22v22H1z" fill="none"/></svg>
+                Sign in with Google
+              </button>
             </form>
             
-            <p className="text-center text-sm text-[#94A3B8] mt-10">
-              Unaligned entity? <Link to="/signup" className="text-white hover:text-[#14B8A6] font-medium transition-colors ml-1 border-b border-white/30 hover:border-[#14B8A6]">Request Clearance</Link>
-            </p>
           </motion.div>
-        </div>
-
-        {/* Right Side (Visual) */}
-        <div className="hidden md:block relative border-l border-white/5 overflow-hidden group/visual">
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#020617] via-[#0F172A]/80 to-[#2563EB]/10 z-0"></div>
-          
-          <svg className="absolute inset-0 w-full h-full opacity-10" xmlns="http://www.w3.org/2000/svg">
-             <defs>
-               <pattern id="hex" width="40" height="40" patternUnits="userSpaceOnUse">
-                 <path d="M 20 0 L 40 10 L 40 30 L 20 40 L 0 30 L 0 10 Z" fill="none" stroke="white" strokeWidth="1"/>
-               </pattern>
-             </defs>
-             <rect width="100%" height="100%" fill="url(#hex)" />
-          </svg>
-
-          <BrainCircuit className="absolute top-[10%] right-[-10%] w-[600px] h-[600px] text-white/5 rotate-12 group-hover/visual:rotate-[20deg] group-hover/visual:scale-110 transition-transform duration-[5s] ease-out pointer-events-none" />
-          
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full px-16">
-             <TiltCard tiltStrength={8} glowColor="rgba(37,99,235,0.2)" className="p-10 rounded-[2.5rem] bg-[#020617]/60 backdrop-blur-xl border border-white/10 shadow-[0_0_50px_rgba(37,99,235,0.15)] relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#2563EB]/10 to-transparent pointer-events-none opacity-50"></div>
-                
-                <div className="flex items-center justify-between mb-8">
-                   <div className="flex items-center gap-3 bg-[#0F172A] px-3 py-1.5 border border-white/10 rounded-full">
-                      <div className="w-2 h-2 rounded-full bg-[#14B8A6] shadow-[0_0_10px_#14B8A6] animate-pulse"></div>
-                      <span className="text-[10px] font-mono text-white tracking-widest uppercase">System Online</span>
-                   </div>
-                   <span className="text-[10px] font-mono text-[#94A3B8] opacity-50">v4.2.0-core</span>
-                </div>
-                
-                <h3 className="text-3xl font-black text-white mb-4 leading-tight tracking-tight">Neural network operating at optimal capacity.</h3>
-                
-                <div className="mt-8 space-y-4 font-mono text-xs text-[#94A3B8]">
-                   <div className="flex justify-between border-b border-white/5 pb-2">
-                     <span>Latency</span>
-                     <span className="text-[#14B8A6]">12ms</span>
-                   </div>
-                   <div className="flex justify-between border-b border-white/5 pb-2">
-                     <span>Active Nodes</span>
-                     <span className="text-white">4,092</span>
-                   </div>
-                   <div className="flex justify-between">
-                     <span>Security Protocol</span>
-                     <span className="text-[#2563EB]">Lockdown Engaged</span>
-                   </div>
-                </div>
-             </TiltCard>
-          </div>
         </div>
       </div>
     </div>

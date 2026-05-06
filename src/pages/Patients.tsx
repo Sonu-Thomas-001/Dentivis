@@ -19,45 +19,42 @@ export function Patients() {
   );
 
   return (
-    <div className="space-y-8 pb-12 font-sans text-white max-w-7xl mx-auto">
+    <div className="space-y-8 pb-12 font-sans max-w-7xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="text-[10px] font-mono tracking-widest text-[#14B8A6] mb-2 drop-shadow-[0_0_8px_rgba(20,184,166,0.8)]">GLOBAL_DIRECTORY_ACCESS</div>
-          <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-[#94A3B8] tracking-tight">Patient Registry</h1>
-          <p className="text-[#94A3B8] mt-2 text-sm font-light">Cross-indexed demographic and clinical records.</p>
+          <div className="text-[10px] font-semibold tracking-widest text-secondary mb-2 uppercase">Directory</div>
+          <h1 className="text-4xl font-bold tracking-tight text-foreground">Patients</h1>
+          <p className="text-muted-foreground mt-2 text-sm">Manage your patient demographic and clinical records.</p>
         </motion.div>
         
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex gap-4 w-full sm:w-auto">
           <div className="relative w-full sm:w-80">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94A3B8]" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search by name or ident..." 
-              className="w-full bg-[#020617]/50 border border-white/10 rounded-full pl-11 pr-4 py-2.5 text-sm text-white placeholder:text-[#94A3B8] focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] transition-all backdrop-blur-md"
+              placeholder="Search by name or ID..." 
+              className="w-full bg-card border border-border rounded-full pl-11 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
             />
           </div>
-          <button className="w-10 h-10 rounded-full border border-white/10 bg-[#0F172A]/50 text-white flex items-center justify-center hover:bg-white/10 transition-colors shrink-0 backdrop-blur-md relative group">
-            <Filter className="w-4 h-4 text-[#94A3B8] group-hover:text-white transition-colors" />
-            <span className="absolute top-0 right-0 w-2 h-2 rounded-full bg-[#2563EB]"></span>
+          <button className="w-10 h-10 rounded-full border border-border bg-card flex items-center justify-center hover:bg-accent hover:text-accent-foreground text-muted-foreground transition-colors shrink-0 shadow-sm">
+            <Filter className="w-4 h-4" />
           </button>
         </motion.div>
       </div>
 
       <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}>
-        <div className="rounded-[2rem] border border-white/5 bg-[#0F172A]/60 backdrop-blur-3xl shadow-2xl overflow-hidden relative">
-           <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none"></div>
-           
+        <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden relative">
            <div className="p-0 z-10 relative">
              <div className="overflow-x-auto no-scrollbar">
                 <table className="w-full text-left border-collapse min-w-[900px]">
                    <thead>
-                      <tr className="border-b border-white/5 text-[10px] font-mono tracking-widest text-[#94A3B8] uppercase bg-[#020617]/30">
-                         <th className="py-5 px-8 font-normal">Ident / Profile</th>
-                         <th className="py-5 px-8 font-normal">Contact Vectors</th>
-                         <th className="py-5 px-8 font-normal">Clinical Status</th>
-                         <th className="py-5 px-8 font-normal">Last Telemetry</th>
-                         <th className="py-5 px-8 font-normal text-right">Actions</th>
+                      <tr className="border-b border-border text-xs font-medium text-muted-foreground uppercase bg-muted/50">
+                         <th className="py-4 px-6">Patient Profile</th>
+                         <th className="py-4 px-6">Contact Info</th>
+                         <th className="py-4 px-6">Clinical Status</th>
+                         <th className="py-4 px-6">Last Visit</th>
+                         <th className="py-4 px-6 text-right">Actions</th>
                       </tr>
                    </thead>
                    <tbody>
@@ -67,66 +64,66 @@ export function Patients() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 + (idx * 0.05) }}
                             key={patient.id} 
-                            className="border-b border-white/5 hover:bg-white/[0.03] transition-colors relative group/row cursor-pointer"
+                            className="border-b border-border hover:bg-muted/50 transition-colors relative group cursor-pointer"
                          >
-                            <td className="py-5 px-8">
+                            <td className="py-4 px-6">
                                <div className="flex items-center gap-4">
-                                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2563EB]/20 to-[#14B8A6]/10 border border-white/10 flex flex-col items-center justify-center shrink-0 shadow-[0_0_10px_rgba(37,99,235,0.1)]">
-                                   <User className="w-4 h-4 text-white/80" />
+                                 <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex flex-col items-center justify-center shrink-0">
+                                   <User className="w-4 h-4 text-primary" />
                                  </div>
                                  <div>
-                                   <div className="font-bold text-white text-base mb-0.5 tracking-tight group-hover/row:text-[#2563EB] transition-colors">{patient.name}</div>
-                                   <div className="flex items-center gap-2 text-[10px] font-mono text-[#94A3B8]">
+                                   <div className="font-semibold text-foreground text-sm mb-0.5 group-hover:text-primary transition-colors">{patient.name}</div>
+                                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                                      <span>{patient.id}</span>
-                                     <span className="w-1 h-1 rounded-full bg-[#94A3B8]/30"></span>
-                                     <span>AGE {patient.age}</span>
+                                     <span className="w-1 h-1 rounded-full bg-muted-foreground/30"></span>
+                                     <span>Age {patient.age}</span>
                                    </div>
                                  </div>
                                </div>
                             </td>
-                            <td className="py-5 px-8">
-                              <div className="space-y-1.5">
-                                <div className="flex items-center gap-2 text-xs text-[#94A3B8]">
-                                  <Mail className="w-3 h-3 text-white/40 group-hover/row:text-[#14B8A6] transition-colors" />
+                            <td className="py-4 px-6">
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                  <Mail className="w-3.5 h-3.5 group-hover:text-secondary transition-colors" />
                                   <span>{patient.email}</span>
                                 </div>
-                                <div className="flex items-center gap-2 text-xs text-[#94A3B8]">
-                                  <Phone className="w-3 h-3 text-white/40 group-hover/row:text-[#14B8A6] transition-colors" />
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                  <Phone className="w-3.5 h-3.5 group-hover:text-secondary transition-colors" />
                                   <span>{patient.phone}</span>
                                 </div>
                               </div>
                             </td>
-                            <td className="py-5 px-8">
-                               <div className="flex flex-col gap-2 items-start">
-                                 <div className={`inline-flex px-2.5 py-1 rounded-full text-[9px] uppercase font-bold tracking-widest border ${
-                                   patient.status === 'Active Treatment' ? 'bg-[#14B8A6]/10 text-[#14B8A6] border-[#14B8A6]/20' :
-                                   patient.status === 'Retention' ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' :
+                            <td className="py-4 px-6">
+                               <div className="flex flex-col gap-1.5 items-start">
+                                 <div className={`inline-flex px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wide border ${
+                                   patient.status === 'Active Treatment' ? 'bg-secondary/10 text-secondary border-secondary/20' :
+                                   patient.status === 'Retention' ? 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20' :
                                    patient.status === 'Pre-Treatment' ? 'bg-orange-500/10 text-orange-500 border-orange-500/20' :
-                                   'bg-[#2563EB]/10 text-[#3B82F6] border-[#2563EB]/20'
+                                   'bg-primary/10 text-primary border-primary/20'
                                  }`}>
                                     {patient.status}
                                  </div>
-                                 <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest">
-                                   <span className="text-[#94A3B8]">Risk:</span>
-                                   <span className={
-                                     patient.risk === 'Low' ? 'text-green-400' :
-                                     patient.risk === 'Medium' ? 'text-yellow-400' : 'text-red-400'
-                                   }>{patient.risk}</span>
+                                 <div className="flex items-center gap-1.5 text-xs">
+                                   <span className="text-muted-foreground">Risk:</span>
+                                   <span className={`font-medium ${
+                                     patient.risk === 'Low' ? 'text-green-500' :
+                                     patient.risk === 'Medium' ? 'text-yellow-500' : 'text-red-500'
+                                   }`}>{patient.risk}</span>
                                  </div>
                                </div>
                             </td>
-                            <td className="py-5 px-8">
-                               <div className="flex items-center gap-2 text-xs text-white/70">
-                                  <Activity className="w-3.5 h-3.5 text-[#14B8A6]" />
+                            <td className="py-4 px-6">
+                               <div className="flex items-center gap-2 text-sm text-foreground">
+                                  <Activity className="w-4 h-4 text-secondary" />
                                   {patient.lastVisit}
                                </div>
-                               <div className="flex items-center gap-2 text-[10px] text-[#94A3B8] mt-1.5">
-                                 <MapPin className="w-3 h-3" />
+                               <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
+                                 <MapPin className="w-3.5 h-3.5" />
                                  {patient.location}
                                </div>
                             </td>
-                            <td className="py-5 px-8 text-right">
-                               <button className="w-8 h-8 rounded-full flex items-center justify-center ml-auto text-[#94A3B8] hover:text-white hover:bg-white/10 transition-colors opacity-0 group-hover/row:opacity-100 border border-transparent hover:border-white/10">
+                            <td className="py-4 px-6 text-right">
+                               <button className="w-8 h-8 rounded-md flex items-center justify-center ml-auto text-muted-foreground hover:text-foreground hover:bg-accent transition-colors opacity-0 group-hover:opacity-100">
                                  <MoreVertical className="w-4 h-4" />
                                </button>
                             </td>
@@ -134,7 +131,7 @@ export function Patients() {
                       ))}
                       {filtered.length === 0 && (
                         <tr>
-                          <td colSpan={5} className="py-12 text-center text-[#94A3B8] font-light">
+                          <td colSpan={5} className="py-12 text-center text-muted-foreground text-sm">
                             No records found matching query.
                           </td>
                         </tr>

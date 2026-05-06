@@ -33,80 +33,76 @@ export function DashboardLayout() {
   };
 
   return (
-    <div className="flex h-screen bg-[#020617] font-sans text-white overflow-hidden relative">
-      {/* Immersive Background */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#2563EB]/10 blur-[120px] rounded-full pointer-events-none"></div>
-         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#14B8A6]/10 blur-[120px] rounded-full pointer-events-none"></div>
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay pointer-events-none"></div>
-      </div>
-
+    <div className="flex h-screen bg-background font-sans text-foreground overflow-hidden relative">
       {/* Desktop Sidebar */}
-      <div className="hidden md:flex h-full shrink-0 z-10 relative">
+      <div className="hidden md:flex h-full shrink-0 z-10 relative border-r border-border">
         <Sidebar />
       </div>
 
       <div className="flex-1 flex flex-col h-full overflow-hidden relative z-10">
-        <header className="h-20 px-6 border-b border-white/5 bg-[#020617]/40 backdrop-blur-3xl flex items-center justify-between shrink-0 sticky top-0 z-20">
+        <header className="h-16 px-6 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex items-center justify-between shrink-0 sticky top-0 z-20">
           <div className="flex items-center gap-4 w-full max-w-md">
             {/* Mobile Sidebar Trigger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger className="md:hidden p-2 -ml-2 rounded-xl text-[#94A3B8] hover:bg-white/5 transition-colors border-none bg-transparent cursor-pointer">
+              <SheetTrigger className="md:hidden p-2 -ml-2 rounded-xl text-muted-foreground hover:bg-muted transition-colors border-none bg-transparent cursor-pointer">
                 <Menu className="w-5 h-5" />
               </SheetTrigger>
-              <SheetContent side="left" className="p-0 w-64 border-r border-white/5 bg-[#020617] shadow-none">
+              <SheetContent side="left" className="p-0 w-64 border-r border-border bg-background shadow-none">
                 <Sidebar className="w-full h-full" onClickItem={() => setMobileMenuOpen(false)} />
               </SheetContent>
             </Sheet>
 
             <div className="flex items-center w-full relative group">
-              <Search className="w-4 h-4 text-[#94A3B8] absolute left-4 group-focus-within:text-[#2563EB] transition-colors" />
+              <Search className="w-4 h-4 text-muted-foreground absolute left-4 group-focus-within:text-primary transition-colors" />
               <Input 
                 type="text" 
-                placeholder="Query nodes, indents, telemetry..." 
-                className="pl-11 bg-[#0F172A]/50 border-white/10 text-white placeholder:text-[#94A3B8] focus-visible:ring-[#2563EB] rounded-full transition-all h-10 w-full hover:bg-[#0F172A]/80 backdrop-blur-md"
+                placeholder="Search patients, cases, scans..." 
+                className="pl-11 bg-muted/50 border-transparent focus-visible:ring-primary rounded-full transition-all h-9 w-full hover:bg-muted"
               />
-              <div className="absolute right-4 text-[10px] font-mono tracking-widest text-[#94A3B8] opacity-50 px-1 border border-white/10 rounded pointer-events-none hidden sm:block">CMD+K</div>
+              <div className="absolute right-4 text-[10px] font-medium text-muted-foreground opacity-50 px-1.5 border border-border rounded pointer-events-none hidden sm:block">CMD+K</div>
             </div>
           </div>
           
-          <div className="flex items-center gap-4 ml-4">
-            <button className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 bg-[#0F172A]/50 text-[#94A3B8] hover:bg-white/10 transition-colors hidden sm:flex backdrop-blur-md relative">
-              <Bell className="w-4 h-4" />
-              <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#2563EB] rounded-full border-2 border-[#020617]"></div>
+          <div className="flex items-center gap-3 ml-4">
+            <button 
+              onClick={toggleTheme}
+              className="w-9 h-9 flex items-center justify-center rounded-full border border-border bg-background text-muted-foreground hover:bg-muted transition-colors"
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
-            <button className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 bg-[#0F172A]/50 text-[#94A3B8] hover:bg-white/10 transition-colors hidden sm:flex backdrop-blur-md">
-              <Fingerprint className="w-4 h-4 text-[#14B8A6]" />
+            <button className="w-9 h-9 flex items-center justify-center rounded-full border border-border bg-background text-muted-foreground hover:bg-muted transition-colors hidden sm:flex relative">
+              <Bell className="w-4 h-4" />
+              <div className="absolute top-0 right-0 w-2 h-2 bg-primary rounded-full border-2 border-background"></div>
             </button>
             
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-3 cursor-pointer p-1.5 sm:pr-4 rounded-full border border-white/10 bg-[#0F172A]/50 hover:bg-white/10 backdrop-blur-md transition-colors shrink-0 outline-none">
-                <Avatar className="w-8 h-8 border border-white/10 shadow-sm bg-[#020617] rounded-full overflow-hidden">
+              <DropdownMenuTrigger className="flex items-center gap-2 cursor-pointer p-1 sm:pr-3 rounded-full border border-border bg-background hover:bg-muted transition-colors shrink-0 outline-none">
+                <Avatar className="w-7 h-7 border border-border shadow-sm bg-muted rounded-full overflow-hidden">
                   <AvatarImage src={`https://avatar.vercel.sh/${user?.name || "doctor"}.png?theme=daisy`} className="rounded-full" />
-                  <AvatarFallback className="bg-transparent text-[#94A3B8] font-mono text-xs">{user?.name?.charAt(0) || 'D'}</AvatarFallback>
+                  <AvatarFallback className="bg-transparent text-muted-foreground font-medium text-xs">{user?.name?.charAt(0) || 'D'}</AvatarFallback>
                 </Avatar>
                 <div className="text-right hidden sm:block">
-                  <p className="text-sm font-bold text-white leading-none tracking-tight">{user?.name || 'Dr. Carter'}</p>
-                  <p className="text-[10px] text-[#14B8A6] mt-1 font-mono uppercase tracking-widest leading-none drop-shadow-[0_0_8px_rgba(20,184,166,0.8)]">Level 4 Auth</p>
+                  <p className="text-sm font-semibold text-foreground leading-none tracking-tight">{user?.name || 'Dr. Carter'}</p>
                 </div>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 rounded-2xl border border-white/10 bg-[#0F172A]/90 backdrop-blur-3xl p-2 shadow-2xl text-white">
+              <DropdownMenuContent align="end" className="w-56 rounded-xl border border-border bg-popover p-2 shadow-md text-popover-foreground">
                 <DropdownMenuGroup>
                   <DropdownMenuLabel className="font-normal px-2 py-1.5">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-bold leading-none">{user?.name || 'Dr. Carter'}</p>
-                      <p className="text-xs leading-none text-[#94A3B8]">{user?.email || 'carter@dentivis.ai'}</p>
+                      <p className="text-sm font-semibold leading-none">{user?.name || 'Dr. Carter'}</p>
+                      <p className="text-xs leading-none text-muted-foreground">{user?.email || 'carter@dentivis.ai'}</p>
                     </div>
                   </DropdownMenuLabel>
-                  <DropdownMenuSeparator className="bg-white/10" />
-                  <DropdownMenuItem className="cursor-pointer rounded-xl hover:bg-white/10 focus:bg-white/10 px-3 py-2 text-sm transition-colors text-[#94A3B8] hover:text-white">
-                    <User className="mr-3 h-4 w-4" />
-                    <span>User Vector</span>
+                  <DropdownMenuSeparator className="bg-border" />
+                  <DropdownMenuItem className="cursor-pointer rounded-md hover:bg-muted focus:bg-muted px-2 py-2 text-sm transition-colors text-muted-foreground hover:text-foreground">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>My Profile</span>
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator className="bg-white/10" />
-                  <DropdownMenuItem className="cursor-pointer rounded-xl hover:bg-red-500/10 focus:bg-red-500/10 text-red-500 focus:text-red-500 px-3 py-2 text-sm transition-colors" onClick={handleLogout}>
-                    <LogOut className="mr-3 h-4 w-4" />
-                    <span>Terminate Session</span>
+                  <DropdownMenuSeparator className="bg-border" />
+                  <DropdownMenuItem className="cursor-pointer rounded-md hover:bg-destructive/10 focus:bg-destructive/10 text-destructive focus:text-destructive px-2 py-2 text-sm transition-colors" onClick={handleLogout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log Out</span>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
@@ -114,8 +110,8 @@ export function DashboardLayout() {
 
           </div>
         </header>
-        <main className="flex-1 overflow-y-auto p-4 sm:p-8 md:p-10 z-10 relative">
-          <div className="max-w-7xl mx-auto h-full">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 z-10 relative bg-muted/20">
+          <div className="max-w-6xl mx-auto h-full">
             <Outlet />
           </div>
         </main>
