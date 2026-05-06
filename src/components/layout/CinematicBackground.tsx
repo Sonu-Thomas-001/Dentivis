@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { Environment, SpotLight, Stars } from '@react-three/drei';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { NeuralCore } from '../3d/NeuralCore';
+import { HolographicTeeth } from '../3d/HolographicTeeth';
 
 export const CinematicBackground = () => {
   const { scrollYProgress } = useScroll();
@@ -20,7 +21,7 @@ export const CinematicBackground = () => {
       </div>
       
       <div className="fixed inset-0 z-0 h-screen pointer-events-none opacity-80 mix-blend-screen">
-        <Canvas camera={{ position: [0, 0, 15], fov: 45 }}>
+        <Canvas frameloop="demand" camera={{ position: [0, 0, 15], fov: 45 }}>
           <Environment preset="city" />
           <ambientLight intensity={0.5} />
           <SpotLight position={[10, 15, 10]} angle={0.3} penumbra={1} intensity={2} color="#2563EB" />
@@ -28,7 +29,10 @@ export const CinematicBackground = () => {
           <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
           
           <group position={[0, 0, 0]}>
-            <NeuralCore scale={1.5} />
+            <NeuralCore scale={1.2} />
+          </group>
+          <group position={[0, -1.5, 3]}>
+            <HolographicTeeth />
           </group>
         </Canvas>
         <div className="absolute bottom-0 inset-x-0 h-1/3 bg-gradient-to-t from-[#020617] to-transparent"></div>

@@ -6,9 +6,6 @@ import { CinematicBackground } from "../components/layout/CinematicBackground";
 import { GradientText } from "../components/ui/GradientText";
 import { cinematicReveal } from "../components/animations/Timeline";
 
-import { Canvas } from "@react-three/fiber";
-import { HolographicTeeth } from "../components/3d/HolographicTeeth";
-
 export const Landing = () => {
   return (
     <div className="w-full relative bg-transparent font-sans text-white overflow-hidden pb-40">
@@ -37,14 +34,6 @@ const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center pb-[10vh] px-6 overflow-hidden">
       
-      {/* Interactive 3D Canvas Background for Hero */}
-      <div className="absolute inset-0 z-0 h-screen opacity-80 mix-blend-screen overflow-hidden">
-        <Canvas camera={{ position: [0, 0, 15], fov: 45 }} gl={{ antialias: true, alpha: true }}>
-          <HolographicTeeth />
-        </Canvas>
-        <div className="absolute bottom-0 inset-x-0 h-1/3 bg-gradient-to-t from-[#020617] to-transparent pointer-events-none"></div>
-      </div>
-
       <motion.div 
         style={{ y: yText, opacity: opacityText, scale: scaleText }}
         className="w-full max-w-7xl mx-auto flex flex-col items-center text-center relative z-10 pointer-events-none"

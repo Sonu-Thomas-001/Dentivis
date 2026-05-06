@@ -1,12 +1,8 @@
-import React, { useRef, useMemo } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { Float, Line, Points, PointMaterial, Trail } from '@react-three/drei';
+import React, { useMemo } from 'react';
+import { Line, PointMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 
 export function HolographicTeeth() {
-  const groupRef = useRef<THREE.Group>(null);
-  const particlesRef = useRef<THREE.Points>(null);
-
   // Create a jaw-like curve of points
   const points = useMemo(() => {
     const pts = [];
@@ -40,34 +36,9 @@ export function HolographicTeeth() {
     return pos;
   }, []);
 
-  useFrame((state) => {
-    if (groupRef.current) {
-      // Parallax effect based on pointer
-      const targetX = state.pointer.x * 0.5;
-      const targetY = state.pointer.y * 0.5;
-      
-      groupRef.current.rotation.y += (targetX - groupRef.current.rotation.y) * 0.05;
-      groupRef.current.rotation.x += (-targetY - groupRef.current.rotation.x) * 0.05;
-      
-      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
-    }
-    
-    if (particlesRef.current) {
-      particlesRef.current.rotation.y = state.clock.elapsedTime * 0.05;
-    }
-  });
-
   return (
-    <group ref={groupRef} position={[0, -1, 0]}>
-      {/* Abstract Teeth/Jaw Curve */}
-      <Trail width={2} length={8} color={new THREE.Color(0x14B8A6)} attenuation={(t) => t * t}>
-        <mesh>
-          <sphereGeometry args={[0.05]} />
-          <meshBasicMaterial color="#14B8A6" />
-        </mesh>
-      </Trail>
-
-      <Float speed={2} rotationIntensity={0.2} floatIntensity={0.5}>
+    <group position={[0, -1, 0]} rotation={[0.2, 0.5, 0]}>
+      <group>
         <Line 
           points={points}
           color="#2563EB"
@@ -87,10 +58,10 @@ export function HolographicTeeth() {
             />
           </mesh>
         ))}
-      </Float>
+      </group>
 
       {/* Ambient Neural Particles */}
-      <points ref={particlesRef}>
+      <points>
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
