@@ -1,39 +1,143 @@
 import React, { useState, useRef, Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
-import { Center, OrbitControls, Environment, ContactShadows, Html, SpotLight, MeshDistortMaterial } from "@react-three/drei";
+import { Canvas, useLoader } from "@react-three/fiber";
+import { Center, OrbitControls, Environment, ContactShadows, Html, SpotLight } from "@react-three/drei";
 import { Card } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Upload, Focus, RotateCcw, Box, RefreshCw, Sparkles, Send, Stethoscope, AlertCircle, TrendingUp } from "lucide-react";
 import * as THREE from "three";
+import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from "../components/ui/sheet";
 import { Input } from "../components/ui/input";
 
-function Loader({ progress }: { progress: number }) {
+function Loader({ progress }: { progress?: number }) {
   return (
     <Html center>
       <div className="flex flex-col items-center gap-4">
         <div className="w-16 h-16 relative flex items-center justify-center">
-           <RefreshCw className="w-8 h-8 animate-spin text-[#14B8A6] absolute" />
-           <div className="absolute inset-0 rounded-full border border-t border-[#2563EB] animate-[spin_2s_linear_infinite]"></div>
+           <RefreshCw className="w-8 h-8 animate-spin text-secondary absolute" />
+           <div className="absolute inset-0 rounded-full border border-t border-primary animate-[spin_2s_linear_infinite]"></div>
         </div>
-        <span className="text-sm font-mono tracking-widest text-[#94A3B8] uppercase">Neural scan {progress.toFixed(0)}%</span>
+        <span className="text-sm font-semibold tracking-widest text-muted-foreground uppercase">Translating Mesh...</span>
       </div>
     </Html>
   );
 }
 
-const StlModel = React.memo(function StlModel({
+function STLModel({ url, wireframe, color }: any) {
+  const geometry = useLoader(STLLoader, url);
+  return (
+    <mesh geometry={geometry}>
+       <meshPhysicalMaterial 
+         color={color === '#e2e8f0' ? '#0F172A' : color} 
+         emissive="#14B8A6"
+         emissiveIntensity={0.2}
+         wireframe={wireframe} 
+         roughness={0.1} 
+         metalness={0.8} 
+         transmission={0.9}
+         thickness={2}
+         clearcoat={1}
+         side={THREE.DoubleSide} 
+       />
+    </mesh>
+  );
+}
+
+function OBJModel({ url, wireframe, color }: any) {
+  const obj = useLoader(OBJLoader, url) as THREE.Group;
+  const meshColor = color === '#e2e8f0' ? '#0F172A' : color;
+  
+  React.useEffect(() => {
+    obj.traverse((child: any) => {
+      if (child.isMesh) {
+        child.material = new THREE.MeshPhysicalMaterial({
+             color: meshColor,
+             emissive: "#14B8A6",
+             emissiveIntensity: 0.2,
+             wireframe: wireframe,
+             roughness: 0.1,
+             metalness: 0.8,
+             transmission: 0.9,
+             thickness: 2,
+             clearcoat: 1,
+             side: THREE.DoubleSide
+        });
+      }
+    });
+  }, [obj, wireframe, meshColor]);
+
+  return <primitive object={obj} />;
+}
+
+function FBXModel({ url, wireframe, color }: any) {
+  const fbx = useLoader(FBXLoader, url) as THREE.Group;
+  const meshColor = color === '#e2e8f0' ? '#0F172A' : color;
+  
+  React.useEffect(() => {
+    fbx.traverse((child: any) => {
+      if (child.isMesh) {
+        child.material = new THREE.MeshPhysicalMaterial({
+             color: meshColor,
+             emissive: "#14B8A6",
+             emissiveIntensity: 0.2,
+             wireframe: wireframe,
+             roughness: 0.1,
+             metalness: 0.8,
+             transmission: 0.9,
+             thickness: 2,
+             clearcoat: 1,
+             side: THREE.DoubleSide
+        });
+      }
+    });
+  }, [fbx, wireframe, meshColor]);
+
+  return <primitive object={fbx} />;
+}
+
+function GLTFModel({ url, wireframe, color }: any) {
+  const gltf = useLoader(GLTFLoader, url) as any;
+  const meshColor = color === '#e2e8f0' ? '#0F172A' : color;
+  
+  React.useEffect(() => {
+    gltf.scene.traverse((child: any) => {
+      if (child.isMesh) {
+        child.material = new THREE.MeshPhysicalMaterial({
+             color: meshColor,
+             emissive: "#14B8A6",
+             emissiveIntensity: 0.2,
+             wireframe: wireframe,
+             roughness: 0.1,
+             metalness: 0.8,
+             transmission: 0.9,
+             thickness: 2,
+             clearcoat: 1,
+             side: THREE.DoubleSide
+        });
+      }
+    });
+  }, [gltf, wireframe, meshColor]);
+
+  return <primitive object={gltf.scene} />;
+}
+
+
+const DynamicModel = React.memo(function DynamicModel({
+  url,
+  type,
   wireframe,
   color,
   transformations,
 }: {
+  url: string;
+  type: string;
   wireframe: boolean;
   color: string;
   transformations: { posX: number; posY: number; posZ: number; rotX: number; rotY: number; rotZ: number; scale: number; };
 }) {
-  const meshRef = useRef<THREE.Mesh>(null);
-
-  // Using a custom geometry to simulate a more complex mesh if needed, or stick to Octahedron as placeholder
   return (
     <Center>
       <group 
@@ -41,21 +145,10 @@ const StlModel = React.memo(function StlModel({
         rotation={[transformations.rotX * (Math.PI / 180), transformations.rotY * (Math.PI / 180), transformations.rotZ * (Math.PI / 180)]}
         scale={[transformations.scale, transformations.scale, transformations.scale]}
       >
-        <mesh castShadow receiveShadow ref={meshRef}>
-           <torusKnotGeometry args={[10, 3, 200, 32]} />
-           <meshPhysicalMaterial 
-             color={color === '#e2e8f0' ? '#0F172A' : color} 
-             emissive="#14B8A6"
-             emissiveIntensity={0.2}
-             wireframe={wireframe} 
-             roughness={0.1} 
-             metalness={0.8} 
-             transmission={0.9}
-             thickness={2}
-             clearcoat={1}
-             side={THREE.DoubleSide} 
-           />
-        </mesh>
+        {type === 'stl' && <STLModel url={url} wireframe={wireframe} color={color} />}
+        {type === 'obj' && <OBJModel url={url} wireframe={wireframe} color={color} />}
+        {type === 'fbx' && <FBXModel url={url} wireframe={wireframe} color={color} />}
+        {(type === 'gltf' || type === 'glb') && <GLTFModel url={url} wireframe={wireframe} color={color} />}
       </group>
     </Center>
   );
@@ -63,7 +156,8 @@ const StlModel = React.memo(function StlModel({
 
 export function Viewer3D() {
   const [modelUrl, setModelUrl] = useState<string | null>(null);
-  const [wireframe, setWireframe] = useState(true);
+  const [modelType, setModelType] = useState<string | null>(null);
+  const [wireframe, setWireframe] = useState(false); // set default to false for solid viewing
   const color = "#e2e8f0"; 
   const [autoRotate, setAutoRotate] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -102,11 +196,18 @@ export function Viewer3D() {
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const url = URL.createObjectURL(file);
+      const ext = file.name.split('.').pop()?.toLowerCase() || '';
+
       setIsLoading(true);
+      setModelType(ext);
+      setModelUrl(url);
+      
+      // Let suspense handle loading time, but we just set a fast timeout for visual feedback
       setTimeout(() => {
-         setModelUrl("loaded"); // mock load
          setIsLoading(false);
-      }, 1000);
+      }, 500);
     }
   };
 
@@ -119,7 +220,7 @@ export function Viewer3D() {
           <p className="text-muted-foreground mt-1 text-sm">Real-time WebGPU rendering with neural overlays.</p>
         </div>
         <div className="flex gap-4">
-          <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileSelect} accept=".stl,.ply,.obj" />
+          <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileSelect} accept=".stl,.obj,.fbx,.gltf,.glb" />
           <Button onClick={() => fileInputRef.current?.click()} className="bg-card border border-primary/50 hover:bg-primary/10 text-primary rounded-full px-6 h-12 shadow-sm transition-all flex items-center gap-2">
             <Upload className="w-4 h-4" /> INJECT MESH
           </Button>
@@ -210,7 +311,7 @@ export function Viewer3D() {
                 </div>
               </div>
               <p className="font-bold text-2xl text-foreground mb-2 tracking-tight">No volumetric data</p>
-              <p className="text-muted-foreground text-center max-w-sm font-medium mb-8">Inject a DICOM volume or surface scan to initialize the neural rendering pipeline.</p>
+              <p className="text-muted-foreground text-center max-w-sm font-medium mb-8">Inject a DICOM volume or surface scan (STL, OBJ, FBX, GLB) to initialize the neural rendering pipeline.</p>
               <button onClick={() => fileInputRef.current?.click()} className="px-8 py-4 rounded-full border border-primary/50 hover:bg-primary/10 text-primary font-bold tracking-wide transition-all uppercase text-sm shadow-sm hover:shadow-md">
                 Initialize Sequence
               </button>
@@ -258,10 +359,10 @@ export function Viewer3D() {
                 
                 {isLoading && <Loader progress={50} />}
                 
-                <Suspense fallback={null}>
-                   <StlModel wireframe={wireframe} color={color} transformations={transformations} />
+                <Suspense fallback={<Loader progress={0} />}>
+                   {modelUrl && modelType && <DynamicModel url={modelUrl} type={modelType} wireframe={wireframe} color={color} transformations={transformations} />}
                    <Environment preset="city" />
-                   <ContactShadows position={[0, -30, 0]} opacity={0.3} scale={80} blur={3} far={50} color="#2563EB" />
+                   {modelUrl && <ContactShadows position={[0, -30, 0]} opacity={0.3} scale={80} blur={3} far={50} color="#2563EB" />}
                 </Suspense>
 
                 <OrbitControls 

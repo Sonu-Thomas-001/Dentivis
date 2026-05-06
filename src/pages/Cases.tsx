@@ -175,7 +175,7 @@ export function Cases() {
                       isDragging ? 'border-primary bg-primary/5' : 'border-border bg-muted/30 hover:bg-muted focus:outline-none focus:ring-2 focus:ring-primary'
                     }`}
                   >
-                    <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileSelect} accept=".stl,.obj,.dicom,.zip" />
+                    <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileSelect} accept=".stl,.obj,.fbx,.gltf,.glb,.dicom,.zip" />
                     
                     {file ? (
                       <div className="flex flex-col items-center text-center">
@@ -197,7 +197,7 @@ export function Cases() {
                           <Upload className="w-8 h-8" />
                         </div>
                         <p className="font-semibold text-foreground text-lg mb-2">Drop volumetric payload here</p>
-                        <p className="text-xs text-muted-foreground font-medium max-w-[260px] leading-relaxed">System supports raw point clouds, unified STL meshes, and zipped DICOM directories.</p>
+                        <p className="text-xs text-muted-foreground font-medium max-w-[260px] leading-relaxed">System supports 3D volumes (STL, OBJ, FBX, GLTF/GLB) and zipped DICOM directories.</p>
                       </div>
                     )}
                   </div>
