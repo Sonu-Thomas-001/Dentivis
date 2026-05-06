@@ -6,6 +6,9 @@ import { CinematicBackground } from "../components/layout/CinematicBackground";
 import { GradientText } from "../components/ui/GradientText";
 import { cinematicReveal } from "../components/animations/Timeline";
 
+import { Canvas } from "@react-three/fiber";
+import { HolographicTeeth } from "../components/3d/HolographicTeeth";
+
 export const Landing = () => {
   return (
     <div className="w-full relative bg-transparent font-sans text-white overflow-hidden pb-40">
@@ -33,54 +36,63 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center pb-[10vh] px-6 overflow-hidden">
+      
+      {/* Interactive 3D Canvas Background for Hero */}
+      <div className="absolute inset-0 z-0 h-screen opacity-80 mix-blend-screen overflow-hidden">
+        <Canvas camera={{ position: [0, 0, 15], fov: 45 }} gl={{ antialias: true, alpha: true }}>
+          <HolographicTeeth />
+        </Canvas>
+        <div className="absolute bottom-0 inset-x-0 h-1/3 bg-gradient-to-t from-[#020617] to-transparent pointer-events-none"></div>
+      </div>
+
       <motion.div 
         style={{ y: yText, opacity: opacityText, scale: scaleText }}
-        className="w-full max-w-7xl mx-auto flex flex-col items-center text-center relative z-10"
+        className="w-full max-w-7xl mx-auto flex flex-col items-center text-center relative z-10 pointer-events-none"
       >
         <motion.div
            initial={{ opacity: 0, y: 30 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-           className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-[#0F172A]/80 border border-white/10 backdrop-blur-xl mb-12 shadow-[0_0_40px_rgba(37,99,235,0.2)] relative overflow-hidden group"
+           className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-[#0F172A]/80 border border-white/10 backdrop-blur-xl mb-12 shadow-[0_0_40px_rgba(37,99,235,0.2)] relative overflow-hidden group pointer-events-auto"
         >
            <div className="absolute inset-0 bg-gradient-to-r from-[#2563EB]/0 via-[#14B8A6]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 w-[200%] -translate-x-full group-hover:translate-x-0 ease-linear"></div>
-           <Sparkles className="w-4 h-4 text-[#14B8A6]" />
-           <span className="text-sm font-semibold tracking-widest uppercase text-white/90">Dentivis Neural Engine V2 Live</span>
+           <span className="w-2 h-2 rounded-full bg-[#14B8A6] animate-pulse"></span>
+           <span className="text-sm font-semibold tracking-widest uppercase text-[#E2E8F0]">Dentivis OS 2.0 Live</span>
         </motion.div>
-
+        
         <motion.h1 
            initial={{ opacity: 0, y: 40 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-           className="text-7xl md:text-[8rem] font-bold tracking-tighter mb-8 leading-[0.95] drop-shadow-2xl"
+           className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.9] mb-8 relative drop-shadow-2xl"
         >
-           Precision, <br/> Amplified by <GradientText>AI</GradientText>.
+           <span className="text-white">Reimagining Orthodontics</span><br/>
+           <span className="text-transparent bg-clip-text bg-gradient-to-br from-[#2563EB] via-[#14B8A6] to-white">Through Intelligence.</span>
         </motion.h1>
-
+        
         <motion.p 
            initial={{ opacity: 0, y: 40 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-           className="text-xl md:text-3xl text-[#94A3B8] max-w-4xl mb-16 leading-relaxed font-light"
+           className="text-xl md:text-2xl text-[#94A3B8] max-w-3xl mb-12 font-medium leading-relaxed drop-shadow-md"
         >
-           The first spatial operating system for orthodontics. 
-           Transform raw volume scans into predictive anatomical models in seconds.
+           Dentivis merges AI, simulation, and precision into a new era of orthodontic planning.
         </motion.p>
-
+        
         <motion.div 
            initial={{ opacity: 0, y: 40 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-           className="flex flex-col sm:flex-row items-center gap-6"
+           className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full sm:w-auto pointer-events-auto"
         >
-           <Link to="/signup" className="group relative w-full sm:w-auto px-10 py-5 bg-white text-[#020617] rounded-full font-bold text-lg overflow-hidden transition-all hover:scale-105 shadow-[0_0_60px_-10px_rgba(255,255,255,0.4)] hover:shadow-[0_0_80px_-10px_rgba(255,255,255,0.6)]">
-             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#94A3B8]/30 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
-             <span className="relative z-10 flex items-center justify-center gap-3">
-                Deploy Platform <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-             </span>
+           <Link to="/platform" className="w-full sm:w-auto relative group flex justify-center">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#2563EB] to-[#14B8A6] rounded-full blur-xl opacity-60 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative px-10 py-5 bg-white text-[#020617] font-bold text-lg rounded-full flex items-center justify-center gap-3 hover:scale-105 transition-all duration-300">
+                Explore Platform <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </div>
            </Link>
-           <Link to="/platform" className="w-full sm:w-auto px-10 py-5 rounded-full font-bold text-lg text-white border border-white/10 hover:bg-white/5 hover:border-white/20 transition-colors flex items-center justify-center gap-3 bg-[#020617]/50 backdrop-blur-md">
-             Explore Architecture
+           <Link to="/contact" className="w-full sm:w-auto px-10 py-5 bg-[#0F172A]/80 backdrop-blur-md border border-white/10 text-white font-bold text-lg rounded-full flex items-center justify-center hover:bg-white/10 hover:border-white/20 transition-all duration-300 group">
+              <span className="group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-[#14B8A6] transition-colors">Request Live Demo</span>
            </Link>
         </motion.div>
       </motion.div>

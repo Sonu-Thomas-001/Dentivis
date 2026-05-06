@@ -87,9 +87,7 @@ const AnimatedRoutes = () => {
 export default function App() {
   return (
     <BrowserRouter>
-      <SmoothScroll>
-        <AnimatedRoutes />
-      </SmoothScroll>
+      <AnimatedRoutes />
     </BrowserRouter>
   );
 }
