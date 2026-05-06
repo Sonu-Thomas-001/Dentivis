@@ -12,6 +12,8 @@ interface AppState {
   setUser: (user: User | null) => void;
   activePatientId: string | null;
   setActivePatientId: (id: string | null) => void;
+  sidebarCollapsed: boolean;
+  setSidebarCollapsed: (collapsed: boolean) => void;
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -19,4 +21,6 @@ export const useStore = create<AppState>((set) => ({
   setUser: (user) => set({ user }),
   activePatientId: null,
   setActivePatientId: (activePatientId) => set({ activePatientId }),
+  sidebarCollapsed: false,
+  setSidebarCollapsed: (sidebarCollapsed) => set({ sidebarCollapsed }),
 }));
