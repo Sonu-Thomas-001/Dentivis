@@ -30,7 +30,7 @@ export function Signup() {
       
       const data = await response.json();
       login(data.token, data.user);
-      navigate('/dashboard');
+      navigate('/onboarding');
     } catch (error: any) {
       alert(error.message);
     } finally {

@@ -24,6 +24,7 @@ const FeaturesPage = React.lazy(() => import("./pages/FeaturesPage").then(m => (
 const Pricing = React.lazy(() => import("./pages/Pricing").then(m => ({ default: m.Pricing })));
 const Contact = React.lazy(() => import("./pages/Contact").then(m => ({ default: m.Contact })));
 const Blog = React.lazy(() => import("./pages/Blog").then(m => ({ default: m.Blog })));
+const Onboarding = React.lazy(() => import("./pages/Onboarding").then(m => ({ default: m.Onboarding })));
 
 // A simple suspense loader
 const PageLoader = () => (
@@ -71,6 +72,7 @@ const AnimatedRoutes = () => {
           </Route>
 
           <Route element={<ProtectedRoute />}>
+            <Route path="/onboarding" element={<PageWrapper><Onboarding /></PageWrapper>} />
             <Route element={<DashboardLayout />}>
               <Route path="/dashboard" element={<PageWrapper><Dashboard /></PageWrapper>} />
               <Route path="/cases" element={<PageWrapper><Cases /></PageWrapper>} />
