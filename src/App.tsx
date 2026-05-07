@@ -12,6 +12,7 @@ const Landing = React.lazy(() => import("./pages/Landing").then(m => ({ default:
 const Dashboard = React.lazy(() => import("./pages/Dashboard").then(m => ({ default: m.Dashboard })));
 const Cases = React.lazy(() => import("./pages/Cases").then(m => ({ default: m.Cases })));
 const Patients = React.lazy(() => import("./pages/Patients").then(m => ({ default: m.Patients })));
+const PatientDetails = React.lazy(() => import("./pages/PatientDetails").then(m => ({ default: m.PatientDetails })));
 const Viewer3D = React.lazy(() => import("./pages/Viewer3D").then(m => ({ default: m.Viewer3D })));
 const AIInsights = React.lazy(() => import("./pages/AIInsights").then(m => ({ default: m.AIInsights })));
 const Settings = React.lazy(() => import("./pages/Settings").then(m => ({ default: m.Settings })));
@@ -74,6 +75,7 @@ const AnimatedRoutes = () => {
               <Route path="/dashboard" element={<PageWrapper><Dashboard /></PageWrapper>} />
               <Route path="/cases" element={<PageWrapper><Cases /></PageWrapper>} />
               <Route path="/patients" element={<PageWrapper><Patients /></PageWrapper>} />
+              <Route path="/patients/:id" element={<PageWrapper><PatientDetails /></PageWrapper>} />
               <Route path="/viewer" element={<PageWrapper><Viewer3D /></PageWrapper>} />
               <Route path="/insights" element={<PageWrapper><AIInsights /></PageWrapper>} />
               <Route path="/settings" element={<PageWrapper><Settings /></PageWrapper>} />
